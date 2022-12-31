@@ -1,21 +1,17 @@
 package ru.vsu.cs.lysenko.kinder.data.entities;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.sql.Date;
+
 @Data
+@Builder
 @Table("users")
 public class User {
-
-    public User(String username, String password, String name, String surname) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-    }
-
     @Id
     @Column("user_id")
     private Long id;
@@ -32,4 +28,9 @@ public class User {
     @Column("second_name")
     private String surname;
 
+    @Column("date_of_birth")
+    private Date dateOfBirth;
+
+    @Column("gender")
+    private Long gender;
 }

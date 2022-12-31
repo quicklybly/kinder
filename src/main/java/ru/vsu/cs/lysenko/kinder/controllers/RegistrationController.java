@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.lysenko.kinder.data.entities.User;
-import ru.vsu.cs.lysenko.kinder.data_access.SignUpper;
+import ru.vsu.cs.lysenko.kinder.data_access.signUp.SignUpper;
 
 @Controller
 public class RegistrationController {
@@ -27,8 +27,10 @@ public class RegistrationController {
 
     private User parsePayloadToUser(String payload) {
         JSONObject userJson = new JSONObject(payload);
-        return new User(userJson.getString("username"), pwEncoder.encode(userJson.getString("password")),
-                userJson.getString("firstName"), userJson.getString("lastName"));
+        return User.builder().username(userJson.getString("username"))
+                .password(pwEncoder.encode(userJson.getString("password")))
+                .name(userJson.getString("firstName"))
+                .surname(userJson.getString("lastName")).build();
     }
 
 }
