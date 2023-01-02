@@ -10,4 +10,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("SELECT \"password_hash\" FROM users WHERE username = :username")
     String getPasswordByUsername(String username);
+
+    @Query("SELECT \"user_id\" FROM users WHERE username = :username")
+    Long getIdByUsername(String username);
 }

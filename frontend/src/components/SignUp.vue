@@ -56,7 +56,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="submit">Sigh up</v-btn>
+        <v-btn @click="submit">Sign up</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
