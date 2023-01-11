@@ -35,6 +35,7 @@ public class DataBaseSignInner implements SignInner {
         }
         user.setId(userRepo.getIdByUsername(user.getUsername()));
         Session session = createSession(user.getId());
+        //TODO fix duplicates sessionHash
         sessionRepo.save(session);
         return session;
     }
