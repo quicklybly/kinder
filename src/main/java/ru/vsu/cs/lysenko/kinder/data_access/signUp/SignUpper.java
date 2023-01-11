@@ -1,9 +1,9 @@
 package ru.vsu.cs.lysenko.kinder.data_access.signUp;
 
-import org.json.JSONObject;
 import ru.vsu.cs.lysenko.kinder.data.entities.User;
+import ru.vsu.cs.lysenko.kinder.exceptions.UserAlreadyExistsException;
 
 public interface SignUpper {
-    JSONObject signUp(User user);
+     void signUp(User user) throws UserAlreadyExistsException;
 
 }

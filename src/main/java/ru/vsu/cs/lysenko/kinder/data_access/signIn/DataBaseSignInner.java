@@ -1,20 +1,21 @@
 package ru.vsu.cs.lysenko.kinder.data_access.signIn;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.vsu.cs.lysenko.kinder.data.entities.Session;
 import ru.vsu.cs.lysenko.kinder.data.entities.User;
 import ru.vsu.cs.lysenko.kinder.data.repos.SessionRepository;
 import ru.vsu.cs.lysenko.kinder.data.repos.UserRepository;
+import ru.vsu.cs.lysenko.kinder.exceptions.AuthenticationException;
+import ru.vsu.cs.lysenko.kinder.exceptions.WrongPasswordException;
+import ru.vsu.cs.lysenko.kinder.exceptions.WrongUserNameException;
 import ru.vsu.cs.lysenko.kinder.utils.HashUtils;
-import ru.vsu.cs.lysenko.kinder.utils.ResponseUtils;
 
 import java.util.Optional;
 
 public class DataBaseSignInner implements SignInner {
 
-    private static final int SESSION_HASH_LENGTH = 21;
+    private static final int SESSION_HASH_LENGTH = 41;
 
     @Autowired
     private UserRepository userRepo;
@@ -24,24 +25,18 @@ public class DataBaseSignInner implements SignInner {
     private PasswordEncoder pwEncoder;
 
     @Override
-    public JSONObject signIn(User user) {
-        JSONObject response = ResponseUtils.prepareResponse();
+    public Session signIn(User user) throws AuthenticationException {
         Optional<Boolean> isUserInDatabase = userRepo.checkIfUserInRepositoryByUsername(user.getUsername());
         if (!isUserInDatabase.orElse(false)) {
-            response.put("status", "error");
-            response.put("message", "Wrong username");
-            return response;
+            throw new WrongUserNameException();
         }
         if (!pwEncoder.matches(user.getPassword(), userRepo.getPasswordByUsername(user.getUsername()))) {
-            response.put("status", "error");
-            response.put("message", "Wrong password");
-            return response;
+            throw new WrongPasswordException();
         }
         user.setId(userRepo.getIdByUsername(user.getUsername()));
         Session session = createSession(user.getId());
         sessionRepo.save(session);
-        response.put("data", createSessionResponse(session));
-        return response;
+        return session;
     }
 
     private Session createSession(Long userId) {
@@ -49,9 +44,5 @@ public class DataBaseSignInner implements SignInner {
         session.setUserId(userId);
         session.setHash(HashUtils.getRandomString(SESSION_HASH_LENGTH));
         return session;
-    }
-
-    private JSONObject createSessionResponse(Session session) {
-        return new JSONObject().put("id", session.getId().toString()).put("hash", session.getHash());
     }
 }
