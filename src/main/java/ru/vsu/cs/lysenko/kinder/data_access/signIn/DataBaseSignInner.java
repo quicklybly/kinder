@@ -10,6 +10,8 @@ import ru.vsu.cs.lysenko.kinder.data.repos.UserRepository;
 import ru.vsu.cs.lysenko.kinder.utils.HashUtils;
 import ru.vsu.cs.lysenko.kinder.utils.ResponseUtils;
 
+import java.util.Optional;
+
 public class DataBaseSignInner implements SignInner {
 
     private static final int SESSION_HASH_LENGTH = 21;
@@ -24,7 +26,8 @@ public class DataBaseSignInner implements SignInner {
     @Override
     public JSONObject signIn(User user) {
         JSONObject response = ResponseUtils.prepareResponse();
-        if (!userRepo.checkIfUserInRepositoryByUsername(user.getUsername())) {
+        Optional<Boolean> isUserInDatabase = userRepo.checkIfUserInRepositoryByUsername(user.getUsername());
+        if (!isUserInDatabase.orElse(false)) {
             response.put("status", "error");
             response.put("message", "Wrong username");
             return response;

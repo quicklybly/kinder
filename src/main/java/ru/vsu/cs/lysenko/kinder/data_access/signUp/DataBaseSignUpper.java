@@ -6,6 +6,9 @@ import ru.vsu.cs.lysenko.kinder.data.entities.User;
 import ru.vsu.cs.lysenko.kinder.data.repos.UserRepository;
 import ru.vsu.cs.lysenko.kinder.utils.ResponseUtils;
 
+import javax.swing.text.StyledEditorKit;
+import java.util.Optional;
+
 public class DataBaseSignUpper implements SignUpper {
     @Autowired
     private UserRepository userRepo;
@@ -13,7 +16,8 @@ public class DataBaseSignUpper implements SignUpper {
     @Override
     public JSONObject signUp(User user) {
         JSONObject response = ResponseUtils.prepareResponse();
-        if (userRepo.checkIfUserInRepositoryByUsername(user.getUsername())) {
+        Optional<Boolean> isUserInDatabase = userRepo.checkIfUserInRepositoryByUsername(user.getUsername());
+        if (isUserInDatabase.orElse(false)) {
             response.put("status", "error");
             response.put("message", "This user already exist");
             return response;
