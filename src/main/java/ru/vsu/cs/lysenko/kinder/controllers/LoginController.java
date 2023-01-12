@@ -28,16 +28,15 @@ public class LoginController {
     @Autowired
     private SignOuter signOuter;
 
-    @RequestMapping(value = "/sign-in", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/sign-in")
     @ResponseBody
     @CrossOrigin
     public ResponseEntity<String> signIn(@RequestBody String payload, HttpServletResponse response) {
         User user = parsePayloadToUser(payload);
         JSONObject responseBody = new JSONObject();
         try {
-
             Cookie cookie = new Cookie(SESSION_COOKIE_NAME, signInner.signIn(user).getHash());
-            cookie.setHttpOnly(true);
+            cookie.setHttpOnly(false);
             cookie.setPath("/");
             /*
             TODO deploy only
@@ -50,7 +49,7 @@ public class LoginController {
         }
     }
 
-    @RequestMapping(value = "/sign-out", method = RequestMethod.POST)
+    @PostMapping("/sign-out")
     @ResponseBody
     @CrossOrigin
     public ResponseEntity<Void> signOut(HttpServletRequest request, HttpServletResponse response) {
