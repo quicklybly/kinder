@@ -1,7 +1,7 @@
 package ru.vsu.cs.lysenko.kinder.data_access.signIn;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import ru.vsu.cs.lysenko.kinder.data.entities.Session;
 import ru.vsu.cs.lysenko.kinder.data.entities.User;
 import ru.vsu.cs.lysenko.kinder.data.repos.SessionRepository;
@@ -12,17 +12,20 @@ import ru.vsu.cs.lysenko.kinder.exceptions.WrongUserNameException;
 import ru.vsu.cs.lysenko.kinder.utils.HashUtils;
 
 import java.util.Optional;
-
+@Component
 public class DataBaseSignInner implements SignInner {
 
     private static final int SESSION_HASH_LENGTH = 41;
 
-    @Autowired
-    private UserRepository userRepo;
-    @Autowired
-    private SessionRepository sessionRepo;
-    @Autowired
-    private PasswordEncoder pwEncoder;
+    private final UserRepository userRepo;
+    private final SessionRepository sessionRepo;
+    private final PasswordEncoder pwEncoder;
+
+    public DataBaseSignInner(UserRepository userRepo, SessionRepository sessionRepo, PasswordEncoder pwEncoder) {
+        this.userRepo = userRepo;
+        this.sessionRepo = sessionRepo;
+        this.pwEncoder = pwEncoder;
+    }
 
     @Override
     public Session signIn(User user) throws AuthenticationException {

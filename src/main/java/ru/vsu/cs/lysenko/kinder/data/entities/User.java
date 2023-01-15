@@ -1,5 +1,6 @@
 package ru.vsu.cs.lysenko.kinder.data.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -21,10 +22,10 @@ public class User {
 
     @Column("password_hash")
     private String password;
-
+    @JsonProperty("firstName")
     @Column("first_name")
     private String name;
-
+    @JsonProperty("lastName")
     @Column("second_name")
     private String surname;
 

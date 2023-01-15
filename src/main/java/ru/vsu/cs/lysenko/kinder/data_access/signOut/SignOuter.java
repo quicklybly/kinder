@@ -1,12 +1,15 @@
 package ru.vsu.cs.lysenko.kinder.data_access.signOut;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.vsu.cs.lysenko.kinder.data.repos.SessionRepository;
 
-
+@Component
 public class SignOuter {
-    @Autowired
-    private SessionRepository sessionRepo;
+    private final SessionRepository sessionRepo;
+
+    public SignOuter(SessionRepository sessionRepo) {
+        this.sessionRepo = sessionRepo;
+    }
 
     public void signOut(String sessionHash) {
         sessionRepo.deleteByHash(sessionHash);

@@ -1,44 +1,30 @@
 package ru.vsu.cs.lysenko.kinder.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.vsu.cs.lysenko.kinder.data.entities.User;
 import ru.vsu.cs.lysenko.kinder.data_access.signUp.SignUpper;
 import ru.vsu.cs.lysenko.kinder.exceptions.AuthenticationException;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class RegistrationController {
-    @Autowired
-    private SignUpper signUpper;
-
-    @Autowired
-    private PasswordEncoder pwEncoder;
-
-    @RequestMapping(value = "/sign-up", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    private final SignUpper signUpper;
+    @PostMapping("/sign-up")
     @CrossOrigin
-    public ResponseEntity<String> registration(@RequestBody String payload) {
+    public ResponseEntity<String> registration(@RequestBody User user) {
         JSONObject responseBody = new JSONObject();
         try {
-            signUpper.signUp(parsePayloadToUser(payload));
+            signUpper.signUp(user);
+            return ResponseEntity.ok(responseBody.toString());
         } catch (AuthenticationException e) {
-            return new ResponseEntity<>(responseBody.put("cause", e.getMessage()).toString(), HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody.put("cause", e.getMessage()).toString());
         }
-        return ResponseEntity.ok(responseBody.toString());
     }
-
-    private User parsePayloadToUser(String payload) {
-        JSONObject userJson = new JSONObject(payload);
-        return User.builder().username(userJson.getString("username"))
-                .password(pwEncoder.encode(userJson.getString("password")))
-                .name(userJson.getString("firstName"))
-                .surname(userJson.getString("lastName")).build();
-    }
-
 }

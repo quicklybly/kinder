@@ -59,7 +59,7 @@ export default {
 
 <style scoped>
 .header {
-    height: 80px;
+    height: 10vh;
     width: 100vw;
     position: sticky;
     top: 0;

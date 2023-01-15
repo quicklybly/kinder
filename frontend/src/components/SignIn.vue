@@ -86,7 +86,10 @@ export default {
             axios.post(urlConstants.signInURL, {
                 username: this.username,
                 password: md5(this.password)
-            }).then(resp => {
+            }, {
+                "Access-Control-Allow-Origin": "http://localhost:8000/exists",
+                withCredentials: true
+            }).then(() => {
                 this.username = ""
                 this.password = ""
                 this.error = ""
