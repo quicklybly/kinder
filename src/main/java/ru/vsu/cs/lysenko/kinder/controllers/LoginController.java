@@ -1,65 +1,38 @@
 package ru.vsu.cs.lysenko.kinder.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.vsu.cs.lysenko.kinder.data.entities.User;
-import ru.vsu.cs.lysenko.kinder.data_access.signIn.SignInner;
-import ru.vsu.cs.lysenko.kinder.data_access.signOut.SignOuter;
-import ru.vsu.cs.lysenko.kinder.exceptions.AuthenticationException;
+import ru.vsu.cs.lysenko.kinder.config.CookieAuthenticationFilter;
+import ru.vsu.cs.lysenko.kinder.dto.UserDTO;
+import ru.vsu.cs.lysenko.kinder.services.AuthenticationService;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/")
 public class LoginController {
-
-    public static final String SESSION_COOKIE_NAME = "session";
-
-    private final SignInner signInner;
-    private final SignOuter signOuter;
-
+    private final AuthenticationService authenticationService;
     @PostMapping("/sign-in")
-    @CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
-    public ResponseEntity<String> signIn(@RequestBody User user) {
-        JSONObject responseBody = new JSONObject();
-        try {
-            ResponseCookie springCookie = ResponseCookie.from(SESSION_COOKIE_NAME, signInner.signIn(user).getHash())
-                    .httpOnly(true)
-                    .path("/")
-                    .maxAge(999999)
-                    .build();
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, springCookie.toString())
-                    .body("");
-        } catch (AuthenticationException e) {
-            return new ResponseEntity<>(responseBody.put("cause", e.getMessage()).toString(), HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<UserDTO> signIn(@AuthenticationPrincipal UserDTO user, HttpServletResponse response) {
+        Cookie sessionTokenCookie = new Cookie(CookieAuthenticationFilter.COOKIE_NAME,
+                authenticationService.createSessionToken(user));
+        sessionTokenCookie.setHttpOnly(true);
+        sessionTokenCookie.setPath("/");
+        sessionTokenCookie.setMaxAge(Integer.MAX_VALUE);
+        response.addCookie(sessionTokenCookie);
+
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/sign-out")
-    @CrossOrigin
-    public ResponseEntity<Void> signOut(HttpServletRequest request, HttpServletResponse response) {
-        Optional<String> sessionHash = readCookie(request, SESSION_COOKIE_NAME);
-        sessionHash.ifPresent(signOuter::signOut);
-        Cookie sessionCookieToDelete = new Cookie(SESSION_COOKIE_NAME, null);
-        sessionCookieToDelete.setMaxAge(0);
-        response.addCookie(sessionCookieToDelete);
+    @GetMapping("/sign-out")
+    public ResponseEntity<Void> signOut(@AuthenticationPrincipal UserDTO user, @CookieValue(name = "session") String sessionToken) {
+        authenticationService.clearSession(sessionToken);
+        SecurityContextHolder.clearContext();
         return ResponseEntity.noContent().build();
-    }
-
-    public Optional<String> readCookie(HttpServletRequest request, String name) {
-        return Arrays.stream(request.getCookies())
-                .filter(cookie -> name.equals(cookie.getName()))
-                .map(Cookie::getValue)
-                .findAny();
     }
 }

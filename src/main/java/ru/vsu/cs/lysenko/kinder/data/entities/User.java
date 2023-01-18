@@ -24,10 +24,10 @@ public class User {
     private String password;
     @JsonProperty("firstName")
     @Column("first_name")
-    private String name;
+    private String firstName;
     @JsonProperty("lastName")
     @Column("second_name")
-    private String surname;
+    private String lastName;
 
     @Column("date_of_birth")
     private Date dateOfBirth;

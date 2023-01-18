@@ -2,19 +2,18 @@ package ru.vsu.cs.lysenko.kinder.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ru.vsu.cs.lysenko.kinder.data.repos.SessionRepository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.vsu.cs.lysenko.kinder.dto.UserDTO;
 
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class SessionExistenceController {
-    private final SessionRepository sessionRepo;
-
     @GetMapping("/exists")
-    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:8080")
-    public ResponseEntity<Boolean> exists(@CookieValue(name = "session", required = false) String sessionHash) {
-        return ResponseEntity.ok()
-                .body(sessionRepo.existsByHash(sessionHash));
+    public ResponseEntity<Void> exists(@AuthenticationPrincipal UserDTO user) {
+        return ResponseEntity.noContent().build();
     }
 }
