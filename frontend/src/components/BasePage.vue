@@ -28,18 +28,28 @@ export default {
     },
     mounted() {
         axios.get(urlConstants.existsURL, {
-            "Access-Control-Allow-Origin": "http://localhost:8000/exists",
+            "Access-Control-Allow-Origin": "http://localhost:8000/",
             withCredentials: true,
             'Access-Control-Allow-Credentials': true,
-        }).then(resp => {
-            this.loggedIn = resp.data
-        }).catch(error => {
-            console.log(error)
+        }).then(() => {
+            this.loggedIn = true
+        }).catch(() => {
+            this.loggedIn = false
         })
     },
     methods: {
         loggedInSignal(flag) {
-            this.loggedIn = flag;
+          this.loggedIn = flag;
+          if (!flag) {
+            this.clearCookie();
+          }
+        },
+        clearCookie() {
+          axios.get(urlConstants.signOutURL, {
+            "Access-Control-Allow-Origin": "http://localhost:8000/",
+            withCredentials: true,
+            'Access-Control-Allow-Credentials': true,
+          })
         }
     },
 }
