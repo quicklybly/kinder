@@ -87,8 +87,9 @@ export default {
                 username: this.username,
                 password: md5(this.password)
             }, {
-                "Access-Control-Allow-Origin": "http://localhost:8000/exists",
-                withCredentials: true
+              "Access-Control-Allow-Origin": "http://localhost:8000/",
+              withCredentials: true,
+              'Access-Control-Allow-Credentials': true,
             }).then(() => {
                 this.username = ""
                 this.password = ""
@@ -96,7 +97,7 @@ export default {
                 this.signInActive = false
                 return this.$emit("loginFlagChanged", true)
             }).catch(error => {
-                this.error = error.response.data?.cause
+                this.error = error.response.data?.message
             })
         }
     }

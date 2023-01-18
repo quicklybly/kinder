@@ -113,7 +113,7 @@ export default {
                     this.clear()
                 }
             ).catch(error => {
-                this.error = error.response.data?.cause
+                this.error = error.response.data?.message
             })
         },
         clear() {
