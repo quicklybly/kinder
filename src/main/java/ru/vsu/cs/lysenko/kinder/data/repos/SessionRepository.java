@@ -9,5 +9,8 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
     void deleteByHash(String hash);
 
     Boolean existsByHash(String hash);
+
     Optional<Session> findByUserId(Long userId);
+
+    Optional<Session> findByHash(String hash);
 }
