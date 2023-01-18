@@ -3,4 +3,5 @@ export default {
     signOutURL: "http://localhost:8000/sign-out",
     signUpURL: "http://localhost:8000/sign-up",
     existsURL: "http://localhost:8000/exists",
+    friendsURL: "http://localhost:8000/friends",
 }
