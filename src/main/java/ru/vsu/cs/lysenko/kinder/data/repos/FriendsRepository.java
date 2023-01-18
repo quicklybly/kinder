@@ -11,6 +11,6 @@ public interface FriendsRepository extends CrudRepository<User, Long> {
     @Query("SELECT * FROM users AS u " +
             "JOIN relations r on u.user_id=r.right_user_id " +
             "JOIN relation_statuses rs on rs.status_id = r.status_id " +
-            "WHERE r.left_user_id = :userId AND rs.description = 'ACCEPTED'")
-    List<User> getFriends(Long userId);
+            "WHERE r.left_user_id = :userId AND rs.description = :status")
+    List<User> getFriends(Long userId, String status);
 }
