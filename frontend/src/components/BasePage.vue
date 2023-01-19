@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader";
-import PageContent from "@/components/PageContent";
-import PagePlaceHolder from "@/components/PagePlaceHolder.vue";
+import PageHeader from "@/components/header/PageHeader.vue";
+import PageContent from "@/components/pageContent/PageContent.vue";
+import PagePlaceHolder from "@/components/pageContent/PagePlaceHolder.vue";
 import axios from "axios";
 import urlConstants from "@/urlConstants";
 

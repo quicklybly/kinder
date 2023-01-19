@@ -30,7 +30,7 @@
 <script>
 import axios from "axios";
 import urlConstants from "@/urlConstants";
-import UserCard from "@/components/UserCard.vue";
+import UserCard from "@/components/pageContent/lists/UserCard.vue";
 
 const requestTypeEnumNotReactive = [
   "sent",

@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import LeftControlPanel from "@/components/LeftControlPanel.vue";
-import FriendList from "@/components/FriendList.vue";
-import RequestsList from "@/components/RequestsList.vue";
+import LeftControlPanel from "@/components/pageContent/LeftControlPanel.vue";
+import FriendList from "@/components/pageContent/lists/FriendList.vue";
+import RequestsList from "@/components/pageContent/lists/RequestList.vue";
 
 export default {
   name: "PageContent",
