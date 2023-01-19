@@ -3,10 +3,10 @@
       <v-btn class="custom-button" @click="$emit('openPanel', 1)">
         My friends
       </v-btn>
-      <v-btn class="custom-button">
+      <v-btn class="custom-button" @click="$emit('openPanel', 2)">
         Friends requests
       </v-btn>
-      <v-btn class="custom-button">
+      <v-btn class="custom-button" @click="$emit('openPanel', 3)">
         Search friends
       </v-btn>
     </div>
