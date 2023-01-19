@@ -30,7 +30,7 @@ public class LoginController {
     }
 
     @GetMapping("/sign-out")
-    public ResponseEntity<Void> signOut(@AuthenticationPrincipal UserDTO user, @CookieValue(name = "session") String sessionToken) {
+    public ResponseEntity<Void> signOut(@CookieValue(name = "session") String sessionToken) {
         authenticationService.clearSession(sessionToken);
         SecurityContextHolder.clearContext();
         return ResponseEntity.noContent().build();
