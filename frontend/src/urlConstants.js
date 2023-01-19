@@ -1,7 +1,8 @@
 export default {
-    signInURL: "http://localhost:8000/sign-in",
-    signOutURL: "http://localhost:8000/sign-out",
-    signUpURL: "http://localhost:8000/sign-up",
-    existsURL: "http://localhost:8000/exists",
-    friendsURL: "http://localhost:8000/friends",
+    signInURL: "http://localhost:8000/api/sign-in",
+    signOutURL: "http://localhost:8000/api/sign-out",
+    signUpURL: "http://localhost:8000/api/sign-up",
+    existsURL: "http://localhost:8000/api/exists",
+    friendsURL: "http://localhost:8000/api/friends",
+    requestsURL: "http://localhost:8000/api/requests",
 }
