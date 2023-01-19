@@ -1,15 +1,15 @@
 <template>
-    <div class="panel-container">
-      <v-btn class="custom-button" @click="$emit('openPanel', 1)">
-        My friends
-      </v-btn>
-      <v-btn class="custom-button" @click="$emit('openPanel', 2)">
-        Friends requests
-      </v-btn>
-      <v-btn class="custom-button" @click="$emit('openPanel', 3)">
-        Search friends
-      </v-btn>
-    </div>
+  <div class="panel-container">
+    <v-btn class="custom-button" @click="$emit('openPanel', 1)">
+      My friends
+    </v-btn>
+    <v-btn class="custom-button" @click="$emit('openPanel', 2)">
+      Friends requests
+    </v-btn>
+    <v-btn class="custom-button" @click="$emit('openPanel', 3)">
+      Search friends
+    </v-btn>
+  </div>
 </template>
 
 <script>
@@ -17,8 +17,7 @@
 export default {
   name: "LeftControlPanel",
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>
