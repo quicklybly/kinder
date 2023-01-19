@@ -3,10 +3,7 @@ package ru.vsu.cs.lysenko.kinder.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.lysenko.kinder.dto.UserDTO;
 import ru.vsu.cs.lysenko.kinder.services.FriendsService;
 
@@ -28,5 +25,19 @@ public class FriendsController {
     public ResponseEntity<List<UserDTO>> getRequest(@AuthenticationPrincipal UserDTO user,
                                                     @RequestParam(value = "type") String requestType) {
         return ResponseEntity.ok().body(friendsService.getRequests(user, requestType));
+    }
+
+    @DeleteMapping("/friends/{friendId}")
+    public ResponseEntity<Void> deleteFriend(@AuthenticationPrincipal UserDTO user, @PathVariable Long friendId) {
+        friendsService.deleteFriend(user, friendId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/requests/{friendId}")
+    public ResponseEntity<Void> answerFriendRequest(@AuthenticationPrincipal UserDTO user,
+                                                    @PathVariable Long friendId,
+                                                    @RequestParam(value = "answer") String answer) {
+        friendsService.answerFriendRequest(user, friendId, answer);
+        return ResponseEntity.noContent().build();
     }
 }
