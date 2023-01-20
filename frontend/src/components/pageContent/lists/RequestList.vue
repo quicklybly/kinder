@@ -1,5 +1,5 @@
 <template>
-  <v-card class="w-100">
+  <v-card class="w-100 scroll">
     <div class="select-request-type-menu">
       <v-select
           v-model="requestType"
@@ -81,8 +81,8 @@ export default {
 </script>
 
 <style scoped>
-.select-request-type-menu {
-
+.scroll {
+  overflow-y: auto;
+  height: 90vh
 }
-
 </style>

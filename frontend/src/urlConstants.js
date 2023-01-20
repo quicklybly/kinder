@@ -5,4 +5,5 @@ export default {
     existsURL: "http://localhost:8000/api/exists",
     friendsURL: "http://localhost:8000/api/friends",
     requestsURL: "http://localhost:8000/api/requests",
+    searchURL: "http://localhost:8000/api/search",
 }

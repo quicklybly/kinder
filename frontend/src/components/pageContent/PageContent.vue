@@ -6,6 +6,7 @@
     <div class="main-content">
       <friend-list v-if="currentPanel===1"></friend-list>
       <requests-list v-if="currentPanel===2"></requests-list>
+      <search-for-friend v-if="currentPanel===3"></search-for-friend>
     </div>
   </div>
 
@@ -15,10 +16,11 @@
 import LeftControlPanel from "@/components/pageContent/LeftControlPanel.vue";
 import FriendList from "@/components/pageContent/lists/FriendList.vue";
 import RequestsList from "@/components/pageContent/lists/RequestList.vue";
+import SearchForFriend from "@/components/pageContent/lists/SearchForFriend.vue";
 
 export default {
   name: "PageContent",
-  components: {RequestsList, FriendList, LeftControlPanel},
+  components: {SearchForFriend, RequestsList, FriendList, LeftControlPanel},
   data() {
     return {
       currentPanel: 1,
