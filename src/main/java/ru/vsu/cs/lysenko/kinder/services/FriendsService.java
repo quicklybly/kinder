@@ -53,4 +53,15 @@ public class FriendsService {
             throw new AppException("Illegal request type", HttpStatus.BAD_REQUEST);
         }
     }
+
+    public List<UserDTO> searchForFriends(UserDTO user, String query) {
+        return friendsRepo.searchForFriends(user.getId(), query).stream()
+                .map(mapper::userToUserDTO).toList();
+    }
+
+    @Transactional
+    public void addFriend(UserDTO user, Long newFriendId) {
+        relationRepo.createRelation(user.getId(), newFriendId, UserRelationsStatuses.SENT.name());
+        relationRepo.createRelation(newFriendId, user.getId(), UserRelationsStatuses.RECEIVED.name());
+    }
 }

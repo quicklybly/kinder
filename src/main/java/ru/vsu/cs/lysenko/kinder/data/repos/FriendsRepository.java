@@ -13,4 +13,10 @@ public interface FriendsRepository extends CrudRepository<User, Long> {
             "JOIN relation_statuses rs on rs.status_id = r.status_id " +
             "WHERE r.left_user_id = :userId AND rs.description = :status")
     List<User> getFriends(Long userId, String status);
+
+    @Query("select * from users u" +
+            "         where user_id != :userId and" +
+            "               not exists(select 1 from relations where left_user_id = :userId and right_user_id = u.user_id)" +
+            "order by levenshtein(concat(first_name, second_name), :query)")
+    List<User> searchForFriends(Long userId, String query);
 }

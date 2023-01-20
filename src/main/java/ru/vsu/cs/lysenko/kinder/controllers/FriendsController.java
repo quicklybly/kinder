@@ -40,4 +40,17 @@ public class FriendsController {
         friendsService.answerFriendRequest(user, friendId, answer);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDTO>> searchFriends(@AuthenticationPrincipal UserDTO user,
+                                                       @RequestParam(value = "query") String query) {
+        return ResponseEntity.ok().body(friendsService.searchForFriends(user, query));
+    }
+
+    @GetMapping("/search/{newFriendId}")
+    public ResponseEntity<List<UserDTO>> addFriend(@AuthenticationPrincipal UserDTO user,
+                                                       @PathVariable Long newFriendId) {
+        friendsService.addFriend(user, newFriendId);
+        return ResponseEntity.noContent().build();
+    }
 }
