@@ -14,6 +14,7 @@
           hide-details
           clearable
           @click:append-inner="search"
+          v-on:keyup.enter="search"
       ></v-text-field>
     </v-card-text>
     <user-card v-for="friend in friends" :key="friend.id" :user="friend">
