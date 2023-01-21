@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader :loggedIn="loggedIn" @loginFlagChanged="loggedInSignal"></PageHeader>
+    <PageHeader :loggedIn="loggedIn" @loginFlagChanged="loggedInSignal" :user="currentUser" currentUser.sync="user"></PageHeader>
     <PageContent v-if="loggedIn">
     </PageContent>
     <PagePlaceHolder v-else></PagePlaceHolder>
@@ -23,7 +23,9 @@ export default {
   },
   data() {
     return {
-      loggedIn: false
+      loggedIn: false,
+      //TODO - fix this. logout doesn't clear context sign in also not working
+      currentUser: Object
     }
   },
   mounted() {
@@ -31,7 +33,8 @@ export default {
       "Access-Control-Allow-Origin": "http://localhost:8000/",
       withCredentials: true,
       'Access-Control-Allow-Credentials': true,
-    }).then(() => {
+    }).then((resp) => {
+      this.currentUser = resp.data
       this.loggedIn = true
     }).catch(() => {
       this.loggedIn = false

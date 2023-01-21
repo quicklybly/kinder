@@ -6,7 +6,7 @@
         <v-img min-height="50" min-width="50" class="mr-2" style="border-radius: 50px"
                src='@/assets/default-profile-pictures/1.jpg'>
         </v-img>
-        <span>User name</span>
+        <span v-if="loggedIn">{{ user.username }}</span>
         <!--TODO edit profile button-->
       </div>
     </div>
@@ -32,10 +32,11 @@ export default {
   components: {SignUp, SignIn},
   props: {
     loggedIn: Boolean,
+    user: Object
   },
   data() {
     return {
-      loggedInFlag: false
+      loggedInFlag: false,
     }
   },
   mounted() {
