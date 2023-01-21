@@ -22,11 +22,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    public static final Integer SESSION_HASH_LENGTH = 42;
-    public final PasswordEncoder pwEncoder;
-    public final UserRepository userRepo;
-    public final SessionRepository sessionRepo;
-    public final UserMapper userMapper;
+    private static final Integer SESSION_HASH_LENGTH = 42;
+    private final PasswordEncoder pwEncoder;
+    private final UserRepository userRepo;
+    private final SessionRepository sessionRepo;
+    private final UserMapper userMapper;
 
     @Transactional
     public UserDTO authenticateByCredentials(CredentialsDTO credentialsDTO) {
