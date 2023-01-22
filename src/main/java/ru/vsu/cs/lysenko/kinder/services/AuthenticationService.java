@@ -1,7 +1,6 @@
 package ru.vsu.cs.lysenko.kinder.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import ru.vsu.cs.lysenko.kinder.data.repos.SessionRepository;
 import ru.vsu.cs.lysenko.kinder.data.repos.UserRepository;
 import ru.vsu.cs.lysenko.kinder.dto.CredentialsDTO;
 import ru.vsu.cs.lysenko.kinder.dto.UserDTO;
-import ru.vsu.cs.lysenko.kinder.exceptions.AppException;
 import ru.vsu.cs.lysenko.kinder.mappers.UserMapper;
 import ru.vsu.cs.lysenko.kinder.utils.HashUtils;
 
@@ -55,10 +53,7 @@ public class AuthenticationService {
 
     public String createSessionToken(UserDTO user) {
         Session session = Session.builder().userId(user.getId()).hash(HashUtils.getRandomString(SESSION_HASH_LENGTH)).build();
-        sessionRepo.save(session);
-        //DUMMY
-        session = sessionRepo.findByHash(session.getHash())
-                .orElseThrow(() -> new AppException("Database error", HttpStatus.INTERNAL_SERVER_ERROR));
+        session = sessionRepo.save(session);
         return String.join("&", session.getUserId().toString(), session.getId().toString(), session.getHash());
     }
 
