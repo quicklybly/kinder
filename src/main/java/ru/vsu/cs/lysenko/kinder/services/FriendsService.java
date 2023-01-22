@@ -25,13 +25,13 @@ public class FriendsService {
     private final UserMapper mapper;
 
     public List<UserDTO> getFriends(UserDTO user) {
-        return friendsRepo.getFriends(user.getId(),
-                UserRelationsStatuses.ACCEPTED.name()).stream().map(mapper::userToUserDTO).toList();
+        return friendsRepo.getFriends(user.getId()).
+                stream().map(mapper::userToUserDTO).toList();
     }
 
     public List<UserDTO> getRequests(UserDTO user, String requestType) {
         try {
-            return friendsRepo.getFriends(user.getId(),
+            return friendsRepo.getRelatedUsersByStatus(user.getId(),
                             UserRelationsStatuses.valueOf(requestType.toUpperCase()).name())
                     .stream().map(mapper::userToUserDTO).toList();
         } catch (IllegalArgumentException e) {
