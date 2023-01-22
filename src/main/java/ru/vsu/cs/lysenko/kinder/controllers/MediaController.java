@@ -17,12 +17,12 @@ public class MediaController {
 
     @GetMapping(value = "/images/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getUserImages(@PathVariable Long imageId) {
-        return ResponseEntity.ok().body(mediaService.getImage(imageId));
+        return ResponseEntity.ok(mediaService.getImage(imageId));
     }
 
     @PostMapping("/images")
     public ResponseEntity<ImageDTO> postImage(@AuthenticationPrincipal UserDTO user,
                                               @RequestParam(value = "image") MultipartFile file) {
-        return ResponseEntity.ok().body(mediaService.postImage(user, file));
+        return ResponseEntity.ok(mediaService.postImage(user, file));
     }
 }

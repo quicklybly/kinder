@@ -18,13 +18,13 @@ public class FriendsController {
 
     @GetMapping("/friends")
     public ResponseEntity<List<UserDTO>> getFriends(@AuthenticationPrincipal UserDTO user) {
-        return ResponseEntity.ok().body(friendsService.getFriends(user));
+        return ResponseEntity.ok(friendsService.getFriends(user));
     }
 
     @GetMapping("/requests")
     public ResponseEntity<List<UserDTO>> getRequest(@AuthenticationPrincipal UserDTO user,
                                                     @RequestParam(value = "type") String requestType) {
-        return ResponseEntity.ok().body(friendsService.getRequests(user, requestType));
+        return ResponseEntity.ok(friendsService.getRequests(user, requestType));
     }
 
     @DeleteMapping("/friends/{friendId}")
@@ -44,7 +44,7 @@ public class FriendsController {
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchFriends(@AuthenticationPrincipal UserDTO user,
                                                        @RequestParam(value = "query") String query) {
-        return ResponseEntity.ok().body(friendsService.searchForFriends(user, query));
+        return ResponseEntity.ok(friendsService.searchForFriends(user, query));
     }
 
     //TODO bad design endpoint think over it

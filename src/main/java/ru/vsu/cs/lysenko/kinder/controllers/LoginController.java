@@ -39,6 +39,6 @@ public class LoginController {
 
     @GetMapping("/exists")
     public ResponseEntity<UserDTO> exists(@AuthenticationPrincipal UserDTO user) {
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok(user);
     }
 }
