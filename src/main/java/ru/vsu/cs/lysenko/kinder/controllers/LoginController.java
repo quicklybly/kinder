@@ -36,4 +36,9 @@ public class LoginController {
         SecurityContextHolder.clearContext();
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/exists")
+    public ResponseEntity<UserDTO> exists(@AuthenticationPrincipal UserDTO user) {
+        return ResponseEntity.ok().body(user);
+    }
 }
