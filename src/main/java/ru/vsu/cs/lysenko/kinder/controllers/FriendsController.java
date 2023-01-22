@@ -47,9 +47,10 @@ public class FriendsController {
         return ResponseEntity.ok().body(friendsService.searchForFriends(user, query));
     }
 
+    //TODO bad design endpoint think over it
     @GetMapping("/search/{newFriendId}")
     public ResponseEntity<List<UserDTO>> addFriend(@AuthenticationPrincipal UserDTO user,
-                                                       @PathVariable Long newFriendId) {
+                                                   @PathVariable Long newFriendId) {
         friendsService.addFriend(user, newFriendId);
         return ResponseEntity.noContent().build();
     }

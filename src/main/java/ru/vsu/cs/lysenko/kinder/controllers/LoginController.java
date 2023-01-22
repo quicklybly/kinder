@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/")
 public class LoginController {
     private final AuthenticationService authenticationService;
+
     @PostMapping("/sign-in")
     public ResponseEntity<UserDTO> signIn(@AuthenticationPrincipal UserDTO user, HttpServletResponse response) {
         Cookie sessionTokenCookie = new Cookie(CookieAuthenticationFilter.COOKIE_NAME,

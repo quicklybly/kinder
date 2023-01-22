@@ -12,9 +12,10 @@ import ru.vsu.cs.lysenko.kinder.services.UserService;
 @RequiredArgsConstructor
 public class RegistrationController {
     private final UserService userService;
+
     @PostMapping("/sign-up")
     public ResponseEntity<Void> registration(@RequestBody SignUpDTO signUpDTO) {
-            userService.signUp(signUpDTO);
+        userService.signUp(signUpDTO);
         return ResponseEntity.noContent().build();
     }
 }
