@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.vsu.cs.lysenko.kinder.data.entities.Image;
 import ru.vsu.cs.lysenko.kinder.data.repos.ImagesRepository;
@@ -62,6 +63,7 @@ public class MediaService {
         }
     }
 
+    @Transactional
     public void deleteImage(UserDTO user, Long imageId) {
         Image image = imagesRepo.findById(imageId)
                 .orElseThrow(() -> new AppException("Image not found", HttpStatus.NOT_FOUND));
@@ -69,6 +71,7 @@ public class MediaService {
             throw new AppException("User have no permission to access this resource", HttpStatus.FORBIDDEN);
         }
         imagesRepo.deleteById(imageId);
+        imagesRepo.deleteProfilePicture(imageId);
         try {
             Files.deleteIfExists(Paths.get(image.getPath()));
         } catch (IOException e) {
