@@ -27,14 +27,20 @@ public class MediaService {
 
     private final ImageMapper mapper;
 
+    /**
+     * For production use you should separate
+     * backend server machine and media data machine
+     */
+
     public byte[] getImage(Long imageId) {
+        final String errorMessage = "No such image";
         ImageDTO image = mapper.imageToImageDTO(imagesRepo.findById(imageId)
-                .orElseThrow(() -> new AppException("No such image", HttpStatus.NOT_FOUND)));
+                .orElseThrow(() -> new AppException(errorMessage, HttpStatus.NOT_FOUND)));
         Path path = Paths.get(image.getPath());
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new AppException("No such image", HttpStatus.NOT_FOUND);
+            throw new AppException(errorMessage, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -53,6 +59,20 @@ public class MediaService {
             return mapper.imageToImageDTO(image);
         } catch (IOException | IllegalStateException e) {
             throw new AppException("Something wrong with file system", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public void deleteImage(UserDTO user, Long imageId) {
+        Image image = imagesRepo.findById(imageId)
+                .orElseThrow(() -> new AppException("Image not found", HttpStatus.NOT_FOUND));
+        if (!user.getId().equals(image.getUserId())) {
+            throw new AppException("User have no permission to access this resource", HttpStatus.FORBIDDEN);
+        }
+        imagesRepo.deleteById(imageId);
+        try {
+            Files.deleteIfExists(Paths.get(image.getPath()));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 

@@ -25,4 +25,11 @@ public class MediaController {
                                               @RequestParam(value = "image") MultipartFile file) {
         return ResponseEntity.ok(mediaService.postImage(user, file));
     }
+
+    @DeleteMapping("/images/{imageId}")
+    public ResponseEntity<Void> deleteImage(@AuthenticationPrincipal UserDTO user,
+                                            @PathVariable Long imageId) {
+        mediaService.deleteImage(user, imageId);
+        return ResponseEntity.noContent().build();
+    }
 }
