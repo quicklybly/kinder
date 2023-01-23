@@ -1,6 +1,7 @@
 package ru.vsu.cs.lysenko.kinder.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +21,8 @@ import java.time.Instant;
 @Service
 @RequiredArgsConstructor
 public class MediaService {
-
-    private static final String IMAGES_PATH = "/home/quicklybly/IdeaProjects/kinder/media/images";
+    @Value("${app.nfs.path}")
+    private String IMAGES_PATH;
     private final ImagesRepository imagesRepo;
 
     private final ImageMapper mapper;

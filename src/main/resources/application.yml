@@ -5,5 +5,8 @@ server:
 spring:
   config:
     import: secret.yml
+app:
+  nfs:
+    path: /home/quicklybly/IdeaProjects/kinder/media/images
 
 
