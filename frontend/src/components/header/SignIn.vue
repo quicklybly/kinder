@@ -60,6 +60,7 @@
 import axios from "axios";
 import urlConstants from "@/urlConstants";
 import md5 from "js-md5";
+import {userStorage} from "@/dataObjects/UserStorage.js";
 
 export default {
   name: "SignIn",
@@ -79,6 +80,7 @@ export default {
         v => v.length >= 4 || 'Username must be more than 3 characters',
       ],
       error: "",
+      store: userStorage
     }
   },
   methods: {
@@ -90,12 +92,13 @@ export default {
         "Access-Control-Allow-Origin": "http://localhost:8000/",
         withCredentials: true,
         'Access-Control-Allow-Credentials': true,
-      }).then(() => {
+      }).then((resp) => {
         this.username = ""
         this.password = ""
         this.error = ""
         this.signInActive = false
-        return this.$emit("loginFlagChanged", true)
+        this.store.userMapper(resp.data)
+        this.store.userLoggedIn = true
       }).catch(error => {
         this.error = error.response.data?.message
       })

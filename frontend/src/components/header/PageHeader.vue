@@ -1,22 +1,22 @@
 <template>
   <div class="header">
     <div class="left">
-      <div v-if="loggedIn" class="user_info">
+      <div v-if="store.userLoggedIn" class="user_info">
         <!--TODO fix fucking image-->
         <v-img min-height="50" min-width="50" class="mr-2" style="border-radius: 50px"
                src='@/assets/default-profile-pictures/1.jpg'>
         </v-img>
-        <span v-if="loggedIn">{{ user.username }}</span>
+        <span v-if="store.userLoggedIn">{{ store.username }}</span>
         <!--TODO edit profile button-->
       </div>
     </div>
     <div class="login-controls">
       <div>
-        <template v-if="loggedIn">
-          <v-btn @click="loginFlagChanged(false)">Log out</v-btn>
+        <template v-if="store.userLoggedIn">
+          <v-btn @click="store.userLoggedIn = false">Log out</v-btn>
         </template>
         <template v-else>
-          <SignIn ref="signInComponent" @loginFlagChanged="loginFlagChanged"></SignIn>
+          <SignIn ref="signInComponent"></SignIn>
           <SignUp ref="signUpComponent" @registrationSuccess="registrationSuccess"></SignUp>
         </template>
       </div>
@@ -26,27 +26,17 @@
 <script>
 import SignIn from "@/components/header/SignIn.vue";
 import SignUp from "@/components/header/SignUp.vue";
+import {userStorage} from "@/dataObjects/UserStorage.js";
 
 export default {
   name: "PageHeader",
   components: {SignUp, SignIn},
-  props: {
-    loggedIn: Boolean,
-    user: Object
-  },
   data() {
     return {
-      loggedInFlag: false,
+      store: userStorage
     }
   },
-  mounted() {
-    this.loggedInFlag = this.loggedIn
-  },
   methods: {
-    loginFlagChanged(flag) {
-      this.loggedInFlag = flag
-      this.$emit("loginFlagChanged", flag)
-    },
     registrationSuccess(username, pass) {
       this.$refs.signUpComponent.$data.signUpActive = false
       this.$refs.signInComponent.$data.signInActive = true

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <PageHeader :loggedIn="loggedIn" @loginFlagChanged="loggedInSignal" :user="currentUser" currentUser.sync="user"></PageHeader>
-    <PageContent v-if="loggedIn">
+    <PageHeader></PageHeader>
+    <PageContent v-if="store.userLoggedIn">
     </PageContent>
     <PagePlaceHolder v-else></PagePlaceHolder>
   </div>
@@ -13,6 +13,7 @@ import PageContent from "@/components/pageContent/PageContent.vue";
 import PagePlaceHolder from "@/components/pageContent/PagePlaceHolder.vue";
 import axios from "axios";
 import urlConstants from "@/urlConstants";
+import {userStorage} from "@/dataObjects/UserStorage.js";
 
 export default {
   name: "BasePage",
@@ -23,9 +24,7 @@ export default {
   },
   data() {
     return {
-      loggedIn: false,
-      //TODO - fix this. logout doesn't clear context sign in also not working
-      currentUser: Object
+      store: userStorage
     }
   },
   mounted() {
@@ -34,19 +33,20 @@ export default {
       withCredentials: true,
       'Access-Control-Allow-Credentials': true,
     }).then((resp) => {
-      this.currentUser = resp.data
-      this.loggedIn = true
+      this.store.userMapper(resp.data)
+      this.store.userLoggedIn = true
     }).catch(() => {
-      this.loggedIn = false
+      this.store.userLoggedIn = false
     })
   },
-  methods: {
-    loggedInSignal(flag) {
-      this.loggedIn = flag;
+  watch: {
+    "store.userLoggedIn"(flag) {
       if (!flag) {
         this.clearCookie();
       }
-    },
+    }
+  },
+  methods: {
     clearCookie() {
       axios.get(urlConstants.signOutURL, {
         "Access-Control-Allow-Origin": "http://localhost:8000/",
