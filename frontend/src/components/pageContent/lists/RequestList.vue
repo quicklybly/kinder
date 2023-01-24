@@ -8,8 +8,8 @@
       </v-select>
       <user-card v-for="item in items" :key="item.id" :user="item">
         <div v-if="requestType===this.requestTypeEnum[1]">
-          <div class="pa-5">
-            <v-btn @click="answerRequest(item.id, 'ACCEPT')">
+          <div>
+            <v-btn @click="answerRequest(item.id, 'ACCEPT')" class="mr-3">
               Accept
             </v-btn>
             <v-btn @click="answerRequest(item.id, 'DECLINE')">
