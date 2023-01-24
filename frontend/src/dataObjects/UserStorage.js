@@ -8,7 +8,7 @@ export const userStorage = reactive({
     userLoggedIn: false,
     userMapper(user) {
         this.username = user.username
-        this.userId = user.id
+        this.id = user.id
         this.firstName = user.firstName
         this.secondName = user.secondName
     }

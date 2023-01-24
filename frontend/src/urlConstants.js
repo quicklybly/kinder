@@ -6,4 +6,6 @@ export default {
     friendsURL: "http://localhost:8000/api/friends",
     requestsURL: "http://localhost:8000/api/requests",
     searchURL: "http://localhost:8000/api/search",
+    profileBaseURL: "http://localhost:8000/api/users",
+    imageBaseURL: "http://localhost:8000/api/images",
 }
