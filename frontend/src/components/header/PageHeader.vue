@@ -2,12 +2,11 @@
   <div class="header">
     <div class="left">
       <div v-if="store.userLoggedIn" class="user_info">
-        <!--TODO fix fucking image-->
-        <v-img min-height="50" min-width="50" class="mr-2" style="border-radius: 50px"
-               src='@/assets/default-profile-pictures/1.jpg'>
-        </v-img>
+        <v-avatar class="user_avatar ">
+          <v-img v-if="avatar != null" :src='avatarLink'></v-img>
+          <v-img v-else src='@/assets/default-profile-pictures/2.jpg'></v-img>
+        </v-avatar>
         <span v-if="store.userLoggedIn">{{ store.username }}</span>
-        <!--TODO edit profile button-->
       </div>
     </div>
     <div class="login-controls">
@@ -33,8 +32,13 @@ export default {
   components: {SignUp, SignIn},
   data() {
     return {
-      store: userStorage
+      store: userStorage,
+      avatar: null,
+      avatarLink: null,
     }
+  },
+  mounted() {
+
   },
   methods: {
     registrationSuccess(username, pass) {
@@ -42,7 +46,7 @@ export default {
       this.$refs.signInComponent.$data.signInActive = true
       this.$refs.signInComponent.$data.username = username
       this.$refs.signInComponent.$data.password = pass
-    }
+    },
   }
 }
 
@@ -78,5 +82,12 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.user_avatar {
+  min-height: 50px;
+  min-width: 50px;
+  border-radius: 50px;
+  margin-right: 8px;
 }
 </style>
