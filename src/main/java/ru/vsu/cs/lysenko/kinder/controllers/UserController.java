@@ -17,7 +17,7 @@ import java.util.Objects;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/{userId}/profile")
+    @GetMapping("/{userId}")
     public ResponseEntity<ProfileDTO> getProfile(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getProfile(userId));
     }

@@ -14,7 +14,7 @@ public interface ImagesRepository extends CrudRepository<Image, Long> {
     @Query("select * " +
             "from photos p " +
             "join profile_pics pp on p.photo_id = pp.photo_id " +
-            "where p.photo_id = pp.photo_id")
+            "where p.photo_id = pp.photo_id and pp.user_id = :userId")
     Optional<Image> getProfilePicture(Long userId);
 
     @Modifying
