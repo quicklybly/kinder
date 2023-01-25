@@ -146,6 +146,14 @@ export default {
     this.firstName = userStorage.firstName
     this.lastName = userStorage.lastName
   },
+  created() {
+    this.$watch(
+        () => this.$route.params,
+        async () => {
+          this.mounted()
+        }
+    )
+  },
   methods: {
     async getProfile() {
       await axios.get(urlConstants.profileBaseURL + "/" + this.id, {

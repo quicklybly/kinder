@@ -1,6 +1,6 @@
 <template>
   <v-card class="scroll w-100">
-    <user-card v-for="item in items" :key="item.username" :user="item">
+    <user-card v-for="item in items" :key="item.id" :user="item">
       <v-btn @click="deleteFriend(item.id)">
         remove friend
       </v-btn>

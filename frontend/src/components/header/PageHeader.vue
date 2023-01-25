@@ -2,10 +2,12 @@
   <div class="header">
     <div class="left">
       <div v-if="store.userLoggedIn" class="user_info">
-        <v-avatar class="user_avatar ">
-          <v-img v-if="avatar != null" :src='avatarLink'></v-img>
-          <v-img v-else src='@/assets/default-profile-pictures/2.jpg'></v-img>
-        </v-avatar>
+        <router-link :to="{name: 'ProfileView', params: {id: store.id}}">
+          <v-avatar class="user_avatar">
+            <v-img v-if="avatar != null" :src='avatarLink'></v-img>
+            <v-img v-else src='@/assets/default-profile-pictures/2.jpg'></v-img>
+          </v-avatar>
+        </router-link>
         <span v-if="store.userLoggedIn">{{ store.username }}</span>
       </div>
     </div>
@@ -118,7 +120,6 @@ export default {
   flex-direction: row;
   align-items: center;
   padding-right: 20px;
-
 }
 
 .user_info {

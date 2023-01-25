@@ -1,9 +1,11 @@
 <template>
   <v-card class="user-card" elevation="5">
-    <v-avatar size="70" class="ml-3">
-      <v-img v-if="avatar != null" :src='avatarLink'></v-img>
-      <v-img v-else src='@/assets/default-profile-pictures/2.jpg'></v-img>
-    </v-avatar>
+    <router-link :to="{name: 'ProfileView', params: {id: user.id}}">
+      <v-avatar size="70" class="ml-3">
+        <v-img v-if="avatar != null" :src='avatarLink'></v-img>
+        <v-img v-else src='@/assets/default-profile-pictures/2.jpg'></v-img>
+      </v-avatar>
+    </router-link>
     <v-divider vertical class="mx-3"></v-divider>
     <div>
       <span>
