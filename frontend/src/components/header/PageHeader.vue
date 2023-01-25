@@ -26,6 +26,8 @@
 import SignIn from "@/components/header/SignIn.vue";
 import SignUp from "@/components/header/SignUp.vue";
 import {userStorage} from "@/dataObjects/UserStorage.js";
+import axios from "axios";
+import urlConstants from "@/urlConstants";
 
 export default {
   name: "PageHeader",
@@ -38,7 +40,13 @@ export default {
     }
   },
   mounted() {
-
+    this.getAvatar()
+  },
+  watch: {
+    "store.id"() {
+      if (this.store.id !== -1)
+        this.getAvatar()
+    }
   },
   methods: {
     registrationSuccess(username, pass) {
@@ -47,6 +55,41 @@ export default {
       this.$refs.signInComponent.$data.username = username
       this.$refs.signInComponent.$data.password = pass
     },
+    async getAvatar() {
+      await axios.get(urlConstants.profileBaseURL + "/" + this.store.id + "/avatar", {
+            "Access-Control-All ow-Origin": "http://localhost:8000/",
+            withCredentials: true,
+            'Access-Control-Allow-Credentials': true
+          }
+      ).then((avatarDTO) => {
+        if (avatarDTO == null) {
+          throw Error
+        }
+        this.avatarLink = null
+        this.avatar = null
+        return this.getImage(avatarDTO.data.id)
+      }).then((image) => {
+        this.avatar = image
+        this.avatarLink = window.URL.createObjectURL(image)
+      }).catch((e) => {
+        console.log(e)
+      })
+    },
+    async getImage(id) {
+      let tmpImage
+      await axios.get(urlConstants.imageBaseURL + "/" + id, {
+        "Access-Control-Allow-Origin": "http://localhost:8000/",
+        withCredentials: true,
+        'Access-Control-Allow-Credentials': true,
+        responseType: 'blob',
+      }).then((resp) => {
+        tmpImage = resp.data;
+        return tmpImage
+      }).catch((e) => {
+        console.log(e)
+      })
+      return tmpImage
+    }
   }
 }
 
