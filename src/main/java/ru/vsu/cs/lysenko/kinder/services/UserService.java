@@ -70,4 +70,9 @@ public class UserService {
         userMapper.updateUserFromUserDTO(updatedUser, updatedUserInfo);
         userRepo.save(updatedUser);
     }
+
+    public ImageDTO getAvatar(Long requiredUserId) {
+        return imageMapper.imageToImageDTO(
+                imagesRepo.getProfilePicture(requiredUserId).orElse(null));
+    }
 }

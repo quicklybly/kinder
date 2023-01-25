@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import ru.vsu.cs.lysenko.kinder.dto.ImageDTO;
 import ru.vsu.cs.lysenko.kinder.dto.ProfileDTO;
 import ru.vsu.cs.lysenko.kinder.dto.UserDTO;
 import ru.vsu.cs.lysenko.kinder.dto.forms.UpdateProfileForm;
@@ -33,5 +34,10 @@ public class UserController {
             userService.updateProfilePicture(user, form.getProfilePicture());
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{userId}/avatar")
+    public ResponseEntity<ImageDTO> getProfilePicture(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getAvatar(userId));
     }
 }
