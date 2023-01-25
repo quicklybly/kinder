@@ -30,14 +30,14 @@
         </div>
       </div>
     </v-card>
-    <v-card class="profile-content">
-      <!--      <v-carousel>-->
-      <!--        <v-carousel-item v-for="image in profile.images" :key="image.id"-->
-      <!--                         :src='window.URL.createObjectURL(getImage(image.id))'-->
-      <!--                         cover-->
-      <!--        >-->
-      <!--        </v-carousel-item>-->
-      <!--      </v-carousel>-->
+    <v-card class="profile-content ma-2">
+      <v-carousel v-if="imagesLoaded">
+        <v-carousel-item v-for="image in imagesLinks" :key="image"
+                         :src='image'
+                         cover
+        >
+        </v-carousel-item>
+      </v-carousel>
     </v-card>
   </div>
 </template>
@@ -62,11 +62,13 @@ export default {
       isLoaded: false,
       store: userStorage,
       friendsDialog: false,
-
+      imagesLinks: [],
+      imagesLoaded: false,
     }
   },
-  mounted() {
-    this.getProfile()
+  async mounted() {
+    await this.getProfile()
+    this.getAllImages()
   },
   methods: {
     async getProfile() {
@@ -109,6 +111,17 @@ export default {
       })
       return tmpImage
     },
+    getAllImages() {
+      this.imagesLinks = []
+      this.imagesLoaded = false
+      this.profile.images.forEach(async (image) => {
+            this.imagesLinks.push(window.URL.createObjectURL(await this.getImage(image.id)))
+          }
+      )
+      this.$nextTick(() => {
+        this.imagesLoaded = true
+      })
+    }
   }
 }
 </script>
