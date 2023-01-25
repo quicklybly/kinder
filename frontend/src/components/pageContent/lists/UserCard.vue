@@ -1,7 +1,8 @@
 <template>
   <v-card class="user-card" elevation="5">
     <v-avatar size="70" class="ml-3">
-      <v-img src='@/assets/default-profile-pictures/2.jpg'></v-img>
+      <v-img v-if="avatar != null" :src='avatarLink'></v-img>
+      <v-img v-else src='@/assets/default-profile-pictures/2.jpg'></v-img>
     </v-avatar>
     <v-divider vertical class="mx-3"></v-divider>
     <div>
@@ -19,10 +20,59 @@
 </template>
 
 <script>
+import axios from "axios";
+import urlConstants from "@/urlConstants";
+
 export default {
   name: "UserCard",
   props: {
-    user: Object
+    user: Object,
+  },
+  data() {
+    return {
+      avatar: null,
+      avatarLink: null,
+    }
+  },
+  mounted() {
+    this.getAvatar()
+  },
+  methods: {
+    async getAvatar() {
+      await axios.get(urlConstants.profileBaseURL + "/" + this.user.id + "/avatar", {
+            "Access-Control-All ow-Origin": "http://localhost:8000/",
+            withCredentials: true,
+            'Access-Control-Allow-Credentials': true
+          }
+      ).then((avatarDTO) => {
+        if (avatarDTO == null) {
+          throw Error
+        }
+        this.avatarLink = null
+        this.avatar = null
+        return this.getImage(avatarDTO.data.id)
+      }).then((image) => {
+        this.avatar = image
+        this.avatarLink = window.URL.createObjectURL(image)
+      }).catch((e) => {
+        console.log(e)
+      })
+    },
+    async getImage(id) {
+      let tmpImage
+      await axios.get(urlConstants.imageBaseURL + "/" + id, {
+        "Access-Control-Allow-Origin": "http://localhost:8000/",
+        withCredentials: true,
+        'Access-Control-Allow-Credentials': true,
+        responseType: 'blob',
+      }).then((resp) => {
+        tmpImage = resp.data;
+        return tmpImage
+      }).catch((e) => {
+        console.log(e)
+      })
+      return tmpImage
+    }
   }
 }
 </script>
