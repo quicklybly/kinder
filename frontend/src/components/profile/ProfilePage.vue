@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-container" v-if="isLoaded">
+  <div class="profile-container" v-if="isLoaded && profile !== {}">
     <v-card class="profile-header">
       <div class="header-top-part">
       </div>
@@ -16,15 +16,29 @@
           <v-btn v-if="store.id===profile.user.id" class="header-button">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
-          <v-btn class="header-button">
+          <v-btn class="header-button" @click="friendsDialog = true">
             <v-icon>mdi-account-multiple</v-icon>
           </v-btn>
+          <v-dialog
+              v-model="friendsDialog"
+          >
+            <v-card>
+              <UserCard v-for="user in profile.friends" :key="user.id" :user="user">
+              </UserCard>
+            </v-card>
+          </v-dialog>
         </div>
       </div>
     </v-card>
-    <div class="profile-content">
-
-    </div>
+    <v-card class="profile-content">
+      <!--      <v-carousel>-->
+      <!--        <v-carousel-item v-for="image in profile.images" :key="image.id"-->
+      <!--                         :src='window.URL.createObjectURL(getImage(image.id))'-->
+      <!--                         cover-->
+      <!--        >-->
+      <!--        </v-carousel-item>-->
+      <!--      </v-carousel>-->
+    </v-card>
   </div>
 </template>
 
@@ -32,9 +46,11 @@
 import axios from "axios";
 import urlConstants from "@/urlConstants";
 import {userStorage} from "@/dataObjects/UserStorage";
+import UserCard from "@/components/pageContent/lists/UserCard.vue";
 
 export default {
   name: "ProfilePage",
+  components: {UserCard},
   props: {
     id: -1
   },
@@ -44,7 +60,9 @@ export default {
       avatar: "",
       avatarLink: "",
       isLoaded: false,
-      store: userStorage
+      store: userStorage,
+      friendsDialog: false,
+
     }
   },
   mounted() {
@@ -110,6 +128,7 @@ export default {
 
 .profile-content {
   display: flex;
+  height: max-content;
 }
 
 .avatar {
