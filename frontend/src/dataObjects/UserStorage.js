@@ -3,13 +3,13 @@ import {reactive} from 'vue'
 export const userStorage = reactive({
     username: "",
     firstName: "",
-    secondName: "",
+    lastName: "",
     id: -1,
     userLoggedIn: false,
     userMapper(user) {
         this.username = user.username
         this.id = user.id
         this.firstName = user.firstName
-        this.secondName = user.secondName
+        this.lastName = user.lastName
     }
 })
