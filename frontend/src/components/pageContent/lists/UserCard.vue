@@ -47,11 +47,11 @@ export default {
             'Access-Control-Allow-Credentials': true
           }
       ).then((avatarDTO) => {
-        if (avatarDTO == null) {
-          throw Error
-        }
         this.avatarLink = null
         this.avatar = null
+        if (avatarDTO === undefined) {
+          throw Error
+        }
         return this.getImage(avatarDTO.data.id)
       }).then((image) => {
         this.avatar = image

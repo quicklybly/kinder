@@ -1,6 +1,9 @@
 <template>
   <div class="profile-container" v-if="isLoaded && profile !== {}">
     <v-card class="profile-header">
+      <router-link to="/">
+        <v-icon class="home-icon">mdi-home</v-icon>
+      </router-link>
       <div class="header-top-part">
       </div>
       <div class="header-card-container">
@@ -293,5 +296,12 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.home-icon {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 2;
 }
 </style>
