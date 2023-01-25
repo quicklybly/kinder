@@ -88,7 +88,7 @@
         </div>
       </div>
     </v-card>
-    <v-card class="profile-content ma-2">
+    <v-card class="profile-content">
       <v-carousel v-if="imagesLoaded">
         <v-carousel-item v-for="image in imagesLinks" :key="image"
                          :src='image'
@@ -241,6 +241,10 @@ export default {
 .profile-content {
   display: flex;
   height: max-content;
+  width: 60vw;
+  margin: auto;
+  align-content: center;
+  align-items: center;
 }
 
 .avatar {
@@ -259,6 +263,7 @@ export default {
 .header-card-text {
   margin-left: 16px;
   margin-top: 8px;
+  font-size: large;
 }
 
 .header-top-part {
