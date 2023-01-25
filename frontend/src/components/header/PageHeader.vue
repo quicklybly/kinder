@@ -46,7 +46,7 @@ export default {
     "store.id"() {
       if (this.store.id !== -1)
         this.getAvatar()
-    }
+    },
   },
   methods: {
     registrationSuccess(username, pass) {

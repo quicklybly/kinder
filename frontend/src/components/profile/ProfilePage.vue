@@ -13,9 +13,67 @@
         </span>
         <div class="header-grow-component"></div>
         <div class="header-buttons-container">
-          <v-btn v-if="store.id===profile.user.id" class="header-button">
+          <v-btn v-if="store.id===profile.user.id" class="header-button" @click="editProfileDialog = true">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
+          <v-dialog
+              v-model="editProfileDialog"
+              width="500px"
+          >
+            <v-card>
+              <v-card-title>
+                Edit profile
+              </v-card-title>
+
+              <v-card-text>
+                <v-form v-model="editProfileForm">
+                  <v-container>
+                    <v-col>
+                      <v-text-field
+                          v-model="username"
+                          :rules="usernameRules"
+                          label="Username"
+                          required
+                      ></v-text-field>
+                      <v-text-field
+                          v-model="firstName"
+                          label="First name"
+                          :rules=nameRules
+                          required
+                      ></v-text-field>
+                      <v-text-field
+                          v-model="lastName"
+                          label="Last name"
+                          :rules=nameRules
+                          required
+                      ></v-text-field>
+                      <v-file-input
+                          v-model="editProfileAvatar"
+                          accept="image/jpeg"
+                          placeholder="Pick an avatar"
+                          append-icon="mdi-camera"
+                          prepend-icon=""
+                          label="Avatar"
+                      ></v-file-input>
+                    </v-col>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn @click="editSubmit">Edit</v-btn>
+              </v-card-actions>
+              <v-alert
+                  color="red"
+                  v-if="error"
+              >
+                {{ error }}
+              </v-alert>
+            </v-card>
+          </v-dialog>
+
           <v-btn class="header-button" @click="friendsDialog = true">
             <v-icon>mdi-account-multiple</v-icon>
           </v-btn>
@@ -64,11 +122,29 @@ export default {
       friendsDialog: false,
       imagesLinks: [],
       imagesLoaded: false,
+      editProfileDialog: false,
+      editProfileForm: null,
+      username: "",
+      usernameRules: [
+        v => !!v || 'Username is required',
+        v => v.length >= 4 || 'Username must be more than 3 characters',
+      ],
+      firstName: "",
+      lastName: "",
+      nameRules: [
+        value => !!value || 'Required',
+        value => value.length >= 2 || 'Min 2 characters',
+      ],
+      error: "",
+      editProfileAvatar: "",
     }
   },
   async mounted() {
     await this.getProfile()
     this.getAllImages()
+    this.username = userStorage.username
+    this.firstName = userStorage.firstName
+    this.lastName = userStorage.lastName
   },
   methods: {
     async getProfile() {
@@ -120,6 +196,29 @@ export default {
       )
       this.$nextTick(() => {
         this.imagesLoaded = true
+      })
+    },
+    editSubmit() {
+      const body = new FormData()
+      body.append("user.username", this.username)
+      body.append("user.firstName", this.firstName)
+      body.append("user.lastName", this.lastName)
+      if (this.editProfileAvatar !== "") {
+        body.append("profilePicture", this.editProfileAvatar[0])
+      }
+      axios.put(urlConstants.profileBaseURL + "/" + this.profile.user.id, body, {
+        "Access-Control-Allow-Origin": "http://localhost:8000/",
+        withCredentials: true,
+        'Access-Control-Allow-Credentials': true,
+        "Content-Type": "multipart/form-data",
+      }).then(() => {
+        this.editProfileDialog = false
+        this.store.username = this.username
+        this.store.firstName = this.firstName
+        this.store.lastName = this.lastName
+        this.getProfile()
+      }).catch((e) => {
+        this.error = e.response.data?.message
       })
     }
   }
