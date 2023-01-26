@@ -14,7 +14,9 @@
     <div class="login-controls">
       <div>
         <template v-if="store.userLoggedIn">
-          <v-btn @click="store.userLoggedIn = false">Log out</v-btn>
+          <router-link to="/">
+            <v-btn @click="store.userLoggedIn = false">Log out</v-btn>
+          </router-link>
         </template>
         <template v-else>
           <SignIn ref="signInComponent"></SignIn>
@@ -98,6 +100,11 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: black;
+}
+
 .header {
   height: 10vh;
   width: 100vw;
