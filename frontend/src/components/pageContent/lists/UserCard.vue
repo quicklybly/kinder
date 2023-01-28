@@ -49,7 +49,7 @@ export default {
       ).then((avatarDTO) => {
         this.avatarLink = null
         this.avatar = null
-        if (avatarDTO === undefined) {
+        if (!avatarDTO.data) {
           throw Error
         }
         return this.getImage(avatarDTO.data.id)

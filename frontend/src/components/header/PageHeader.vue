@@ -66,7 +66,7 @@ export default {
             'Access-Control-Allow-Credentials': true
           }
       ).then((avatarDTO) => {
-        if (avatarDTO == null) {
+        if (!avatarDTO.data) {
           throw Error
         }
         this.avatarLink = null
