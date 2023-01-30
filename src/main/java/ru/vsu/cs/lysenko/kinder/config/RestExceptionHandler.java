@@ -15,6 +15,7 @@ public class RestExceptionHandler {
         return ResponseEntity.status(exception.getStatus()).
                 body(ErrorDTO.builder().message(exception.getMessage()).build());
     }
+
     @ExceptionHandler(value = {MissingServletRequestParameterException.class})
     public ResponseEntity<ErrorDTO> handleMissingParameterException(MissingServletRequestParameterException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).

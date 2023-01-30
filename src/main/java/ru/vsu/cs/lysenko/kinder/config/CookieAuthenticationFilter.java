@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 public class CookieAuthenticationFilter extends OncePerRequestFilter {
     public static final String COOKIE_NAME = "session";
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

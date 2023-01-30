@@ -18,6 +18,7 @@ import java.util.Objects;
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
     private final AuthenticationService authenticationService;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UserDTO userDTO = null;
