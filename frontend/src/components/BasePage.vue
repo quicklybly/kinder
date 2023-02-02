@@ -9,7 +9,7 @@
 import PageHeader from "@/components/header/PageHeader.vue";
 import axios from "axios";
 import urlConstants from "@/urlConstants";
-import {userStorage} from "@/dataObjects/UserStorage.js";
+import {userStorage} from "@/store/UserStorage.js";
 
 export default {
   name: "BasePage",

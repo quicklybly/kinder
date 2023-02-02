@@ -1,6 +1,6 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
-import MainView from "@/routerViews/MainView.vue";
-import ProfileView from "@/routerViews/ProfileView.vue";
+import MainView from "@/views/MainView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 
 const router = createRouter({
     history: createWebHashHistory(),

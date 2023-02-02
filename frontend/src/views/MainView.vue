@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {userStorage} from "@/dataObjects/UserStorage";
+import {userStorage} from "@/store/UserStorage";
 import PageContent from "@/components/pageContent/PageContent.vue";
 import PagePlaceHolder from "@/components/pageContent/PagePlaceHolder.vue";
 

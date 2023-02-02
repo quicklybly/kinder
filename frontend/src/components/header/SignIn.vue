@@ -60,7 +60,7 @@
 import axios from "axios";
 import urlConstants from "@/urlConstants";
 import md5 from "js-md5";
-import {userStorage} from "@/dataObjects/UserStorage.js";
+import {userStorage} from "@/store/UserStorage.js";
 
 export default {
   name: "SignIn",

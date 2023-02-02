@@ -29,9 +29,10 @@
 <script>
 import SignIn from "@/components/header/SignIn.vue";
 import SignUp from "@/components/header/SignUp.vue";
-import {userStorage} from "@/dataObjects/UserStorage.js";
+import {userStorage} from "@/store/UserStorage.js";
 import axios from "axios";
 import urlConstants from "@/urlConstants";
+import {getImage} from "@/helpers/http";
 
 export default {
   name: "PageHeader",
@@ -71,7 +72,7 @@ export default {
         }
         this.avatarLink = null
         this.avatar = null
-        return this.getImage(avatarDTO.data.id)
+        return getImage(avatarDTO.data.id)
       }).then((image) => {
         this.avatar = image
         this.avatarLink = window.URL.createObjectURL(image)
@@ -79,21 +80,6 @@ export default {
         console.log(e)
       })
     },
-    async getImage(id) {
-      let tmpImage
-      await axios.get(urlConstants.imageBaseURL + "/" + id, {
-        "Access-Control-Allow-Origin": "http://localhost:8000/",
-        withCredentials: true,
-        'Access-Control-Allow-Credentials': true,
-        responseType: 'blob',
-      }).then((resp) => {
-        tmpImage = resp.data;
-        return tmpImage
-      }).catch((e) => {
-        console.log(e)
-      })
-      return tmpImage
-    }
   }
 }
 

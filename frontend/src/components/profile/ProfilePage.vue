@@ -106,8 +106,9 @@
 <script>
 import axios from "axios";
 import urlConstants from "@/urlConstants";
-import {userStorage} from "@/dataObjects/UserStorage";
+import {userStorage} from "@/store/UserStorage";
 import UserCard from "@/components/pageContent/lists/UserCard.vue";
+import {getImage} from "@/helpers/http.js"
 
 export default {
   name: "ProfilePage",
@@ -165,7 +166,7 @@ export default {
           this.isLoaded = true
           throw Error
         }
-        return this.getImage(profile.profilePicture.id)
+        return getImage(profile.profilePicture.id)
       }).then((avatar) => {
         this.avatar = avatar
         this.avatarLink = window.URL.createObjectURL(avatar)
@@ -173,28 +174,12 @@ export default {
       }).catch((e) => {
         console.log(e)
       })
-      // हमें भगवान पर भरोसा है
-    },
-    async getImage(id) {
-      let tmpImage
-      await axios.get(urlConstants.imageBaseURL + "/" + id, {
-        "Access-Control-Allow-Origin": "http://localhost:8000/",
-        withCredentials: true,
-        'Access-Control-Allow-Credentials': true,
-        responseType: 'blob',
-      }).then((resp) => {
-        tmpImage = resp.data;
-        return tmpImage
-      }).catch((e) => {
-        console.log(e)
-      })
-      return tmpImage
     },
     getAllImages() {
       this.imagesLinks = []
       this.imagesLoaded = false
       this.profile.images.forEach(async (image) => {
-            this.imagesLinks.push(window.URL.createObjectURL(await this.getImage(image.id)))
+            this.imagesLinks.push(window.URL.createObjectURL(await getImage(image.id)))
           }
       )
       this.$nextTick(() => {
