@@ -36,7 +36,7 @@ Kinder is a simple social network created with Vue, Spring and PostgreSQL.
 Project is: in progress <br>
 To-do:
 
-* Migrate from Spring-data-jdbc to jpa
+* Migrate from Spring-data-jdbc to jpa (in progress)
 * Add comments/likes support
 * Integrate chat system
 
