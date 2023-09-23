@@ -17,10 +17,13 @@ public class Relation {
     @Id
     @Column("relation_id")
     private Long relationId;
+
     @Column("left_user_id")
     private Long leftUserId;
+
     @Column("right_user_id")
     private Long rightUserId;
+
     @Column("status_id")
     private Long statusId;
 }

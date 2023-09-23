@@ -1,8 +1,8 @@
 package ru.vsu.cs.lysenko.kinder.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,24 +12,25 @@ import ru.vsu.cs.lysenko.kinder.services.MediaService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/images")
 public class MediaController {
     private final MediaService mediaService;
 
-    @GetMapping(value = "/images/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getUserImages(@PathVariable Long imageId) {
-        return ResponseEntity.ok(mediaService.getImage(imageId));
+    @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getUserImages(@PathVariable Long imageId) {
+        return mediaService.getImage(imageId);
     }
 
-    @PostMapping("/images")
-    public ResponseEntity<ImageDTO> postImage(@AuthenticationPrincipal UserDTO user,
-                                              @RequestParam(value = "image") MultipartFile file) {
-        return ResponseEntity.ok(mediaService.postImage(user, file));
+    @PostMapping
+    public ImageDTO postImage(@AuthenticationPrincipal UserDTO user,
+                              @RequestParam(value = "image") MultipartFile file) {
+        return mediaService.postImage(user, file);
     }
 
-    @DeleteMapping("/images/{imageId}")
-    public ResponseEntity<Void> deleteImage(@AuthenticationPrincipal UserDTO user,
-                                            @PathVariable Long imageId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{imageId}")
+    public void deleteImage(@AuthenticationPrincipal UserDTO user,
+                            @PathVariable Long imageId) {
         mediaService.deleteImage(user, imageId);
-        return ResponseEntity.noContent().build();
     }
 }

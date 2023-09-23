@@ -1,7 +1,7 @@
 package ru.vsu.cs.lysenko.kinder.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.lysenko.kinder.dto.ImageDTO;
@@ -19,13 +19,14 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ProfileDTO> getProfile(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getProfile(userId));
+    public ProfileDTO getProfile(@PathVariable Long userId) {
+        return userService.getProfile(userId);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{userId}")
-    public ResponseEntity<Void> updateProfile(@AuthenticationPrincipal UserDTO user,
-                                              UpdateProfileForm form) {
+    public void updateProfile(@AuthenticationPrincipal UserDTO user,
+                              UpdateProfileForm form) {
         if (Objects.nonNull(form.getUser())) {
             userService.updateProfile(user, form.getUser());
         }
@@ -33,11 +34,10 @@ public class UserController {
         if (Objects.nonNull(form.getProfilePicture())) {
             userService.updateProfilePicture(user, form.getProfilePicture());
         }
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{userId}/avatar")
-    public ResponseEntity<ImageDTO> getProfilePicture(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getAvatar(userId));
+    public ImageDTO getProfilePicture(@PathVariable Long userId) {
+        return userService.getAvatar(userId);
     }
 }

@@ -23,8 +23,11 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UserDTO userDTO = null;
         if (authentication instanceof UsernamePasswordAuthenticationToken) {
-            userDTO = authenticationService.authenticateByCredentials(
-                    new CredentialsDTO(authentication.getPrincipal().toString(), authentication.getCredentials().toString()));
+            var credentials = CredentialsDTO.builder()
+                    .username(authentication.getPrincipal().toString())
+                    .password(authentication.getCredentials().toString())
+                    .build();
+            userDTO = authenticationService.authenticateByCredentials(credentials);
         } else if (authentication instanceof PreAuthenticatedAuthenticationToken) {
             userDTO = authenticationService.findBySession(authentication.getPrincipal().toString());
         }

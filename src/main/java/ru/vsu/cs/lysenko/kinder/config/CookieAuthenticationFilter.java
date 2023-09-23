@@ -2,6 +2,7 @@ package ru.vsu.cs.lysenko.kinder.config;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -13,9 +14,11 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@Component
 public class CookieAuthenticationFilter extends OncePerRequestFilter {
     public static final String COOKIE_NAME = "session";
 
+    // TODO refactor this shitty code
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
