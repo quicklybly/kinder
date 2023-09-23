@@ -1,7 +1,7 @@
 package ru.vsu.cs.lysenko.kinder.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
 public class LoginController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/sign-in")
-    public ResponseEntity<UserDTO> signIn(@AuthenticationPrincipal UserDTO user, HttpServletResponse response) {
+    public UserDTO signIn(@AuthenticationPrincipal UserDTO user, HttpServletResponse response) {
         Cookie sessionTokenCookie = new Cookie(CookieAuthenticationFilter.COOKIE_NAME,
                 authenticationService.createSessionToken(user));
         sessionTokenCookie.setHttpOnly(true);
@@ -27,18 +26,18 @@ public class LoginController {
         sessionTokenCookie.setMaxAge(Integer.MAX_VALUE);
         response.addCookie(sessionTokenCookie);
 
-        return ResponseEntity.ok(user);
+        return user;
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/sign-out")
-    public ResponseEntity<Void> signOut(@CookieValue(name = "session") String sessionToken) {
+    public void signOut(@CookieValue(name = "session") String sessionToken) {
         authenticationService.clearSession(sessionToken);
         SecurityContextHolder.clearContext();
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/exists")
-    public ResponseEntity<UserDTO> exists(@AuthenticationPrincipal UserDTO user) {
-        return ResponseEntity.ok(user);
+    public UserDTO exists(@AuthenticationPrincipal UserDTO user) {
+        return user;
     }
 }
