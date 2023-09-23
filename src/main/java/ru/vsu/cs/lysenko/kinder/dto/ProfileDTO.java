@@ -14,9 +14,6 @@ import java.util.List;
 public class ProfileDTO {
     private UserDTO user;
     private List<UserDTO> friends;
-
     private ImageDTO profilePicture;
-
     private List<ImageDTO> images;
-
 }

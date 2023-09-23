@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
     private Long id;
     private String username;
+
     @JsonProperty("firstName")
     private String firstName;
+
     @JsonProperty("lastName")
     private String lastName;
 }
