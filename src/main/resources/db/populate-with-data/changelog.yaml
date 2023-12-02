@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate_users
+      author: quicklybly
+      changes:
+        - tagDatabase:
+            tag: populate_users
+  - changeSet:
+      id: populate_users_from_csv
+      author: quicklybly
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  header: first_name
+                  name: first_name
+                  type: VARCHAR
+              - column:
+                  header: second_name
+                  name: second_name
+                  type: VARCHAR
+              - column:
+                  header: username
+                  name: username
+                  type: VARCHAR
+              - column:
+                  header: password_hash
+                  name: password_hash
+                  type: VARCHAR
+            commentLineStartsWith: //
+            encoding: UTF-8
+            file: 'data.csv'
+            quotchar: ''''
+            relativeToChangelogFile: true
+            schemaName: public
+            separator: ','
+            tableName: users
+            usePreparedStatements: true

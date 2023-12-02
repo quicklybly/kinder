@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/init/changelog.yaml
   - include:
       file: db/add-fuzzystrmatch/changelog.yaml
+  - include:
+      file: db/populate-with-data/changelog.yaml
