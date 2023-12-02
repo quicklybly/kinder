@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: fuzzystrmatch
+      author: quicklybly
+      changes:
+        - tagDatabase:
+            tag: fuzzystrmatcht
+  - changeSet:
+      id: fuzzystrmatch_add
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/add_fuzzystrmatch.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_fuzzystrmatch.sql'
