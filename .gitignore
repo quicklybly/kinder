@@ -33,3 +33,4 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/resources/secret.yml
+/.env

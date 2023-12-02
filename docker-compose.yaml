@@ -1,0 +1,44 @@
+# todo fuck cors
+version: "3.7"
+services:
+  db:
+    container_name: kinder-db
+    image: postgres:15.2
+    restart: on-failure
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
+      POSTGRES_DB: kinderdb
+    # not needed
+    ports:
+      - "5432:5432"
+    volumes:
+      - kinder-volume:/var/lib/postgresql/data
+    networks:
+      - app_net
+  backend:
+    container_name: kinder-back
+    build: .
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - app_net
+  frontend:
+    container_name: kinder-front
+    build: ./frontend
+    restart: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - app_net
+
+networks:
+  app_net:
+volumes:
+  kinder-volume:
