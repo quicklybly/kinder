@@ -1,0 +1,238 @@
+databaseChangeLog:
+  - changeSet:
+      id: kinder_init
+      author: quicklybly
+      changes:
+        - tagDatabase:
+            tag: kinder_init
+  - changeSet:
+        id: kinder_init_create_genders
+        author: quicklybly
+        changes:
+            - sqlFile:
+                  dbms: 'postgresql'
+                  encoding: 'utf8'
+                  endDelimiter: ';'
+                  stripComments: 'true'
+                  splitStatements: 'true'
+                  relativeToChangelogFile: 'true'
+                  path: 'sql/create_genders.sql'
+        rollback:
+            - sqlFile:
+                  dbms: 'postgresql'
+                  encoding: 'utf8'
+                  endDelimiter: ';'
+                  stripComments: 'true'
+                  splitStatements: 'true'
+                  relativeToChangelogFile: 'true'
+                  path: 'rollback/drop_genders.sql'
+  - changeSet:
+      id: kinder_init_create_users
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_users.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_users.sql'
+  - changeSet:
+      id: kinder_init_create_sessions
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_sessions.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_sessions.sql'
+  - changeSet:
+      id: kinder_init_create_interests
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_interests.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_interests.sql'
+  - changeSet:
+      id: kinder_init_create_user_interest
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_user_interests.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_user_interests.sql'
+  - changeSet:
+      id: kinder_init_create_relation_statuses
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_relation_statuses.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_relation_statuses.sql'
+  - changeSet:
+      id: kinder_init_create_relations
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_relations.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_relations.sql'
+  - changeSet:
+      id: kinder_init_create_photos
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_photos.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_photos.sql'
+  - changeSet:
+      id: kinder_init_create_profile_pics
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_profile_pics.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_profile_pics.sql'
+  - changeSet:
+      id: kinder_init_create_comments
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_comments.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_comments.sql'
+  - changeSet:
+      id: kinder_init_create_likes
+      author: quicklybly
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'sql/create_likes.sql'
+      rollback:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: 'utf8'
+            endDelimiter: ';'
+            stripComments: 'true'
+            splitStatements: 'true'
+            relativeToChangelogFile: 'true'
+            path: 'rollback/drop_likes.sql'

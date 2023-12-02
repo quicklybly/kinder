@@ -5,8 +5,8 @@ server:
 spring:
   config:
     import: secret.yml
+  liquibase:
+    change-log: db/changelog.yaml
 app:
   nfs:
     path: /home/quicklybly/IdeaProjects/kinder/media/images
-
-

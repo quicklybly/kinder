@@ -18,6 +18,11 @@
         <postgresql.version>42.5.1</postgresql.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <jackson-core.version>2.14.1</jackson-core.version>
+        <liquibase.version>4.25.0</liquibase.version>
+        <liquibase.changeLogFile>src/main/resources/db/changelog.yaml</liquibase.changeLogFile>
+        <db.url>enter</db.url>
+        <db.username>enter</db.username>
+        <db.password>enter</db.password>
     </properties>
     <dependencies>
         <dependency>
@@ -56,6 +61,11 @@
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -87,6 +97,19 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <url>jdbc:postgresql://${db.url}?createDatabaseIfNotExist=true</url>
+                    <username>${db.username}</username>
+                    <password>${db.password}</password>
+                    <driver>org.postgresql.Driver</driver>
+                    <changeLogFile>${liquibase.changeLogFile}</changeLogFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                 </configuration>
             </plugin>
         </plugins>
