@@ -24,15 +24,27 @@ public class FriendsService {
 
     private final UserMapper mapper;
 
-    public List<UserDTO> getFriends(UserDTO user) {
-        return friendsRepo.getFriends(user.getId()).
+    public List<UserDTO> getFriends(UserDTO user, Integer pageSize, Integer pageNumber) {
+        // haha, overflow I just don't care
+        Integer offset = pageNumber * pageNumber;
+        return friendsRepo.getFriendsPageable(user.getId(), offset, pageSize).
                 stream().map(mapper::userToUserDTO).toList();
     }
 
-    public List<UserDTO> getRequests(UserDTO user, String requestType) {
+    public List<UserDTO> getRequests(
+            UserDTO user,
+            String requestType,
+            Integer pageSize,
+            Integer pageNumber
+    ) {
         try {
-            return friendsRepo.getRelatedUsersByStatus(user.getId(),
-                            UserRelationsStatuses.valueOf(requestType.toUpperCase()).name())
+            Integer offset = pageSize * pageNumber;
+            return friendsRepo.getRelatedUsersByStatusPageable(
+                            user.getId(),
+                            UserRelationsStatuses.valueOf(requestType.toUpperCase()).name(),
+                            offset,
+                            pageSize
+                    )
                     .stream().map(mapper::userToUserDTO).toList();
         } catch (IllegalArgumentException e) {
             throw new AppException("Illegal request type", HttpStatus.BAD_REQUEST);
@@ -54,9 +66,18 @@ public class FriendsService {
         }
     }
 
-    public List<UserDTO> searchForFriends(UserDTO user, String query) {
-        return friendsRepo.searchForFriends(user.getId(), query).stream()
-                .map(mapper::userToUserDTO).toList();
+    public List<UserDTO> searchForFriends(
+            UserDTO user,
+            String query,
+            Integer pageSize, Integer pageNumber
+    ) {
+        Integer offset = pageSize * pageNumber;
+        return friendsRepo.searchForFriends(
+                user.getId(),
+                query,
+                offset,
+                pageSize
+        ).stream().map(mapper::userToUserDTO).toList();
     }
 
     @Transactional
