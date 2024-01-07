@@ -1,6 +1,7 @@
 package ru.vsu.cs.lysenko.kinder.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -10,7 +11,6 @@ import ru.vsu.cs.lysenko.kinder.services.FriendsService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
@@ -20,7 +20,7 @@ public class FriendsController {
     private final FriendsService friendsService;
 
     @GetMapping("/friends")
-    public List<UserDTO> getFriends(
+    public Page<UserDTO> getFriends(
             @AuthenticationPrincipal UserDTO user,
             @RequestParam(name = "pageSize", required = false, defaultValue = "50") @Positive
             Integer pageSize,
@@ -31,7 +31,7 @@ public class FriendsController {
     }
 
     @GetMapping("/requests")
-    public List<UserDTO> getRequest(
+    public Page<UserDTO> getRequest(
             @AuthenticationPrincipal UserDTO user,
             @RequestParam(value = "type") String requestType,
             @RequestParam(name = "pageSize", required = false, defaultValue = "50") @Positive
@@ -57,7 +57,7 @@ public class FriendsController {
     }
 
     @GetMapping("/search")
-    public List<UserDTO> searchFriends(
+    public Page<UserDTO> searchFriends(
             @AuthenticationPrincipal UserDTO user,
             @RequestParam(value = "query") String query,
             @RequestParam(name = "pageSize", required = false, defaultValue = "50") @Positive

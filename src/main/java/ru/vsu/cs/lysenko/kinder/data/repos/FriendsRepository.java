@@ -23,6 +23,12 @@ public interface FriendsRepository extends CrudRepository<User, Long> {
     )
     List<User> getRelatedUsersByStatusPageable(Long userId, String status, Integer offset, Integer limit);
 
+    @Query("SELECT count(*) FROM users AS u " +
+            "JOIN relations r on u.user_id=r.right_user_id " +
+            "JOIN relation_statuses rs on rs.status_id = r.status_id " +
+            "WHERE r.left_user_id = :userId AND rs.description = :status")
+    Long countRelatedUsersByStatus(Long userId, String status);
+
     @Query("select * from users u" +
             "         where user_id != :userId and" +
             "               not exists(select 1 from relations where left_user_id = :userId and right_user_id = u.user_id)" +
@@ -42,5 +48,9 @@ public interface FriendsRepository extends CrudRepository<User, Long> {
                 offset,
                 limit
         );
+    }
+
+    default Long countFriends(Long userId) {
+        return countRelatedUsersByStatus(userId, UserRelationsStatuses.ACCEPTED.name());
     }
 }

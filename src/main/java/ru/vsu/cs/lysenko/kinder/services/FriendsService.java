@@ -1,6 +1,10 @@
 package ru.vsu.cs.lysenko.kinder.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +28,16 @@ public class FriendsService {
 
     private final UserMapper mapper;
 
-    public List<UserDTO> getFriends(UserDTO user, Integer pageSize, Integer pageNumber) {
+    public Page<UserDTO> getFriends(UserDTO user, Integer pageSize, Integer pageNumber) {
         // haha, overflow I just don't care
-        Integer offset = pageNumber * pageNumber;
-        return friendsRepo.getFriendsPageable(user.getId(), offset, pageSize).
+        Integer offset = pageSize * pageNumber;
+        List<UserDTO> content = friendsRepo.getFriendsPageable(user.getId(), offset, pageSize).
                 stream().map(mapper::userToUserDTO).toList();
+        Long total = friendsRepo.countFriends(user.getId());
+        return new PageImpl<>(content, getDefaultPageRequest(pageNumber, pageSize), total);
     }
 
-    public List<UserDTO> getRequests(
+    public Page<UserDTO> getRequests(
             UserDTO user,
             String requestType,
             Integer pageSize,
@@ -39,13 +45,16 @@ public class FriendsService {
     ) {
         try {
             Integer offset = pageSize * pageNumber;
-            return friendsRepo.getRelatedUsersByStatusPageable(
+            String requestTypeString = UserRelationsStatuses.valueOf(requestType.toUpperCase()).name();
+            List<UserDTO> content = friendsRepo.getRelatedUsersByStatusPageable(
                             user.getId(),
-                            UserRelationsStatuses.valueOf(requestType.toUpperCase()).name(),
+                            requestTypeString,
                             offset,
                             pageSize
                     )
                     .stream().map(mapper::userToUserDTO).toList();
+            Long total = friendsRepo.countRelatedUsersByStatus(user.getId(), requestTypeString);
+            return new PageImpl<>(content, getDefaultPageRequest(pageNumber, pageSize), total);
         } catch (IllegalArgumentException e) {
             throw new AppException("Illegal request type", HttpStatus.BAD_REQUEST);
         }
@@ -66,23 +75,29 @@ public class FriendsService {
         }
     }
 
-    public List<UserDTO> searchForFriends(
+    public Page<UserDTO> searchForFriends(
             UserDTO user,
             String query,
             Integer pageSize, Integer pageNumber
     ) {
         Integer offset = pageSize * pageNumber;
-        return friendsRepo.searchForFriends(
+        List<UserDTO> content = friendsRepo.searchForFriends(
                 user.getId(),
                 query,
                 offset,
                 pageSize
         ).stream().map(mapper::userToUserDTO).toList();
+        long total = friendsRepo.count();
+        return new PageImpl<>(content, getDefaultPageRequest(pageNumber, pageSize), total);
     }
 
     @Transactional
     public void addFriend(UserDTO user, Long newFriendId) {
         relationRepo.createRelation(user.getId(), newFriendId, UserRelationsStatuses.SENT.name());
         relationRepo.createRelation(newFriendId, user.getId(), UserRelationsStatuses.RECEIVED.name());
+    }
+
+    private PageRequest getDefaultPageRequest(Integer pageNumber, Integer pageSize) {
+        return PageRequest.of(pageNumber, pageSize, Sort.unsorted());
     }
 }
