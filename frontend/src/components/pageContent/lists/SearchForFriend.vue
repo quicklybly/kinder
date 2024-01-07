@@ -22,6 +22,13 @@
         Add
       </v-btn>
     </user-card>
+    <v-pagination :length="totalPages"
+                  :total-visible="5"
+                  @next="nextPage"
+                  @prev="prevPage"
+                  @update:model-value="pageChanged"
+                  class="pagination"
+    />
   </v-card>
 </template>
 
@@ -37,17 +44,32 @@ export default {
     return {
       friends: [],
       query: "",
+      totalPages: 0,
+      currentPage: 0
+    }
+  },
+  mounted() {
+    this.search()
+  },
+  watch: {
+    totalPages() {
+      this.search()
     }
   },
   methods: {
-    search() {
+    search(pageSize = 10) {
       axios.get(urlConstants.searchURL, {
         "Access-Control-Allow-Origin": "http://localhost:8000/",
         withCredentials: true,
         'Access-Control-Allow-Credentials': true,
-        params: {query: this.query}
+        params: {
+          pageSize: 10,
+          pageNumber: this.currentPage,
+          query: this.query,
+        }
       }).then(resp => {
-        this.friends = resp.data
+        this.friends = resp.data.content
+        this.totalPages = Math.ceil(resp.data.totalElements / pageSize)
       })
     },
     addFriend(id) {
@@ -56,6 +78,18 @@ export default {
         withCredentials: true,
         'Access-Control-Allow-Credentials': true,
       }).then(() => this.search())
+    },
+    nextPage() {
+      this.currentPage++
+      this.search()
+    },
+    prevPage() {
+      this.currentPage--
+      this.search()
+    },
+    pageChanged(pageNumber) {
+      this.currentPage = pageNumber - 1
+      this.search()
     },
   },
 }

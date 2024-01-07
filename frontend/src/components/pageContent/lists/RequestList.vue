@@ -4,6 +4,7 @@
       <v-select
           v-model="requestType"
           :items="requestTypeEnum"
+          @update:menu="_ => currentPage = 0"
       >
       </v-select>
       <user-card v-for="item in items" :key="item.id" :user="item">
@@ -24,6 +25,14 @@
         </div>
       </user-card>
     </div>
+    <!--    todo put this at the bottom + bug with type switch-->
+    <v-pagination :length="totalPages"
+                  :total-visible="5"
+                  @next="nextPage"
+                  @prev="prevPage"
+                  @update:model-value="pageChanged"
+                  class="pagination"
+    />
   </v-card>
 </template>
 
@@ -44,6 +53,8 @@ export default {
       requestTypeEnum: requestTypeEnumNotReactive,
       requestType: requestTypeEnumNotReactive[0],
       items: [],
+      totalPages: 0,
+      currentPage: 0,
     }
   },
   mounted() {
@@ -52,17 +63,25 @@ export default {
   watch: {
     requestType() {
       this.getRequest()
+    },
+    totalPages() {
+      this.getRequest()
     }
   },
   methods: {
-    getRequest() {
+    getRequest(pageNumber = this.currentPage, pageSize = 10) {
       axios.get(urlConstants.requestsURL, {
         "Access-Control-Allow-Origin": "http://localhost:8000/",
         withCredentials: true,
         'Access-Control-Allow-Credentials': true,
-        params: {type: this.requestType}
+        params: {
+          type: this.requestType,
+          pageSize: pageSize,
+          pageNumber: pageNumber
+        }
       }).then(resp => {
-        this.items = resp.data
+        this.items = resp.data.content
+        this.totalPages = Math.ceil(resp.data.totalElements / pageSize)
       }).catch(ex => {
         console.log(ex)
       })
@@ -75,6 +94,18 @@ export default {
             'Access-Control-Allow-Credentials': true,
             params: {answer: answer}
           }).then(() => this.getRequest())
+    },
+    nextPage() {
+      this.currentPage++
+      this.getRequest()
+    },
+    prevPage() {
+      this.currentPage--
+      this.getRequest()
+    },
+    pageChanged(pageNumber) {
+      this.currentPage = pageNumber - 1
+      this.getRequest()
     }
   }
 }
@@ -84,5 +115,9 @@ export default {
 .scroll {
   overflow-y: auto;
   height: 90vh
+}
+
+.pagination {
+  bottom: 0;
 }
 </style>
