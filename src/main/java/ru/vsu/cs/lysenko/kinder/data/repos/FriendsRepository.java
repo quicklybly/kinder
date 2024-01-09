@@ -53,4 +53,11 @@ public interface FriendsRepository extends CrudRepository<User, Long> {
     default Long countFriends(Long userId) {
         return countRelatedUsersByStatus(userId, UserRelationsStatuses.ACCEPTED.name());
     }
+
+    @Query("select count(*) from users u" +
+            "         where user_id != :userId and" +
+            "               not exists(" +
+            "   select 1 from relations where left_user_id = :userId and right_user_id = u.user_id)"
+    )
+    Long countForSearch(Long userId);
 }

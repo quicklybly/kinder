@@ -87,7 +87,7 @@ public class FriendsService {
                 offset,
                 pageSize
         ).stream().map(mapper::userToUserDTO).toList();
-        long total = friendsRepo.count();
+        Long total = friendsRepo.countForSearch(user.getId());
         return new PageImpl<>(content, getDefaultPageRequest(pageNumber, pageSize), total);
     }
 
