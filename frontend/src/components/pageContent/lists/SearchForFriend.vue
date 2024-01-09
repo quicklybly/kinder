@@ -15,20 +15,23 @@
           clearable
           @click:append-inner="search"
           v-on:keyup.enter="search"
-      ></v-text-field>
+      />
     </v-card-text>
+    <header class="d-flex justify-space-between align-center pr-5 pl-5">
+      <span>
+        {{ `Total users in search: ${totalUsers}` }}
+      </span>
+      <v-pagination :length="totalPages"
+                    :total-visible="5"
+                    @update:model-value="pageChanged"
+                    class="pagination"
+      />
+    </header>
     <user-card v-for="friend in friends" :key="friend.id" :user="friend">
       <v-btn @click="addFriend(friend.id)">
         Add
       </v-btn>
     </user-card>
-    <v-pagination :length="totalPages"
-                  :total-visible="5"
-                  @next="nextPage"
-                  @prev="prevPage"
-                  @update:model-value="pageChanged"
-                  class="pagination"
-    />
   </v-card>
 </template>
 
@@ -45,7 +48,9 @@ export default {
       friends: [],
       query: "",
       totalPages: 0,
-      currentPage: 0
+      currentPage: 0,
+      controller: null,
+      totalUsers: 0,
     }
   },
   mounted() {
@@ -54,10 +59,17 @@ export default {
   watch: {
     totalPages() {
       this.search()
+    },
+    totalUsers() {
+      this.search()
     }
   },
   methods: {
     search(pageSize = 10) {
+      if (this.controller) {
+        this.controller.abort()
+      }
+      this.controller = new AbortController()
       axios.get(urlConstants.searchURL, {
         "Access-Control-Allow-Origin": "http://localhost:8000/",
         withCredentials: true,
@@ -66,9 +78,11 @@ export default {
           pageSize: 10,
           pageNumber: this.currentPage,
           query: this.query,
-        }
+        },
+        signal: this.controller.signal
       }).then(resp => {
         this.friends = resp.data.content
+        this.totalUsers = resp.data.totalElements
         this.totalPages = Math.ceil(resp.data.totalElements / pageSize)
       })
     },
@@ -78,14 +92,6 @@ export default {
         withCredentials: true,
         'Access-Control-Allow-Credentials': true,
       }).then(() => this.search())
-    },
-    nextPage() {
-      this.currentPage++
-      this.search()
-    },
-    prevPage() {
-      this.currentPage--
-      this.search()
     },
     pageChanged(pageNumber) {
       this.currentPage = pageNumber - 1

@@ -7,6 +7,16 @@
           @update:menu="_ => currentPage = 0"
       >
       </v-select>
+      <header v-if="totalRequests > 0" class="d-flex justify-space-between align-center pr-5 pl-5">
+        <span>
+          {{ `Total requests ${requestType}: ${totalRequests}` }}
+        </span>
+        <v-pagination :length="totalPages"
+                      :total-visible="5"
+                      @update:model-value="pageChanged"
+                      class="pagination"
+        />
+      </header>
       <user-card v-for="item in items" :key="item.id" :user="item">
         <div v-if="requestType===this.requestTypeEnum[1]">
           <div>
@@ -25,14 +35,6 @@
         </div>
       </user-card>
     </div>
-    <!--    todo put this at the bottom + bug with type switch-->
-    <v-pagination :length="totalPages"
-                  :total-visible="5"
-                  @next="nextPage"
-                  @prev="prevPage"
-                  @update:model-value="pageChanged"
-                  class="pagination"
-    />
   </v-card>
 </template>
 
@@ -55,6 +57,7 @@ export default {
       items: [],
       totalPages: 0,
       currentPage: 0,
+      totalRequests: 0,
     }
   },
   mounted() {
@@ -66,7 +69,10 @@ export default {
     },
     totalPages() {
       this.getRequest()
-    }
+    },
+    totalRequests() {
+      this.getRequest()
+    },
   },
   methods: {
     getRequest(pageNumber = this.currentPage, pageSize = 10) {
@@ -81,6 +87,7 @@ export default {
         }
       }).then(resp => {
         this.items = resp.data.content
+        this.totalRequests = resp.data.totalElements
         this.totalPages = Math.ceil(resp.data.totalElements / pageSize)
       }).catch(ex => {
         console.log(ex)
@@ -95,14 +102,6 @@ export default {
             params: {answer: answer}
           }).then(() => this.getRequest())
     },
-    nextPage() {
-      this.currentPage++
-      this.getRequest()
-    },
-    prevPage() {
-      this.currentPage--
-      this.getRequest()
-    },
     pageChanged(pageNumber) {
       this.currentPage = pageNumber - 1
       this.getRequest()
@@ -115,9 +114,5 @@ export default {
 .scroll {
   overflow-y: auto;
   height: 90vh
-}
-
-.pagination {
-  bottom: 0;
 }
 </style>

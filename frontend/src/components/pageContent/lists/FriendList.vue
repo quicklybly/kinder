@@ -1,18 +1,20 @@
 <template>
   <v-card class="scroll w-100">
+    <header class="d-flex justify-space-between align-center pr-5 pl-5" v-if="totalFriends > 0">
+      <span>
+        {{ `Total friends: ${totalFriends}` }}
+      </span>
+      <v-pagination :length="totalPages"
+                    :total-visible="5"
+                    @update:model-value="pageChanged"
+                    class="pagination"
+      />
+    </header>
     <user-card v-for="item in items" :key="item.id" :user="item">
       <v-btn @click="deleteFriend(item.id)">
         remove friend
       </v-btn>
     </user-card>
-    <!--todo put this at the bottom + bug with type switch + add v-if + it's buggy with fast click-->
-    <v-pagination :length="totalPages"
-                  :total-visible="5"
-                  @next="nextPage"
-                  @prev="prevPage"
-                  @update:model-value="pageChanged"
-                  class="pagination"
-    />
   </v-card>
 </template>
 
@@ -29,6 +31,7 @@ export default {
       items: [],
       totalPages: 0,
       currentPage: 0,
+      totalFriends: 0,
     }
   },
   mounted() {
@@ -36,6 +39,9 @@ export default {
   },
   watch: {
     totalPages() {
+      this.getFriends()
+    },
+    totalFriends() {
       this.getFriends()
     }
   },
@@ -51,6 +57,7 @@ export default {
         }
       }).then(resp => {
         this.items = resp.data.content
+        this.totalFriends = resp.data.totalElements
         this.totalPages = Math.ceil(resp.data.totalElements / pageSize)
       }).catch(ex => {
         console.log(ex)
@@ -62,14 +69,6 @@ export default {
         withCredentials: true,
         'Access-Control-Allow-Credentials': true
       }).then(() => this.getFriends())
-    },
-    nextPage() {
-      this.currentPage++
-      this.getFriends()
-    },
-    prevPage() {
-      this.currentPage--
-      this.getFriends()
     },
     pageChanged(pageNumber) {
       this.currentPage = pageNumber - 1
@@ -84,5 +83,4 @@ export default {
   overflow-y: auto;
   height: 90vh
 }
-
 </style>
